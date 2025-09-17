@@ -154,7 +154,7 @@
                 <div class="nav-search">
                     <div class="search-box">
                         <i class="fas fa-search" style="color:var(--gray);margin-right:8px"></i>
-                        <input id="globalSearch" type="text" placeholder="Search for NGOs, opportunities, events..." oninput="renderNGOList()">
+                        <input id="globalSearch" type="text" placeholder="Search for NGOs, opportunities, events...">
                     </div>
                 </div>
 
@@ -225,7 +225,7 @@
                         <p class="muted">Find organizations by cause, location or interests — click a card to view full profile.</p>
                     </div>
                     <div class="filters">
-                        <select id="categoryFilter" class="filter-select" onchange="renderNGOList()">
+                        <select id="categoryFilter" class="filter-select">
                             <option value="all">All categories</option>
                             <option value="education">Education</option>
                             <option value="health">Health</option>
@@ -233,12 +233,12 @@
                             <option value="women">Women Empowerment</option>
                             <option value="poverty">Poverty Alleviation</option>
                         </select>
-                        <select id="sortSelect" class="filter-select" onchange="renderNGOList()">
+                        <select id="sortSelect" class="filter-select">
                             <option value="relevance">Sort: Relevance</option>
                             <option value="impact">Sort: Impact</option>
                             <option value="new">Sort: Newest</option>
                         </select>
-                        <button class="btn" onclick="renderNGOList()">Apply</button>
+                        <button class="btn" onclick="applyFilters()">Apply</button>
                     </div>
                 </div>
 
@@ -365,6 +365,11 @@
             }
         ];
 
+        // Variables to store current filter state
+        let currentCategory = 'all';
+        let currentSort = 'relevance';
+        let currentSearchQuery = '';
+
         /* ---------- login ---------- */
         function login(){
             const email = document.getElementById('email').value;
@@ -383,6 +388,18 @@
             e.stopPropagation();
             const input = document.getElementById('globalSearch');
             input.value = tag;
+            currentSearchQuery = tag;
+            applyFilters();
+        }
+
+        /* ---------- apply filters function ---------- */
+        function applyFilters() {
+            // Get current filter values
+            currentCategory = document.getElementById('categoryFilter').value;
+            currentSort = document.getElementById('sortSelect').value;
+            currentSearchQuery = document.getElementById('globalSearch').value.toLowerCase().trim();
+            
+            // Render the NGO list with the current filters
             renderNGOList();
         }
 
@@ -394,25 +411,21 @@
             const grid = document.getElementById('ngoGrid');
             grid.innerHTML = '';
 
-            const query = (document.getElementById('globalSearch')?.value || '').toLowerCase().trim();
-            const category = document.getElementById('categoryFilter').value;
-            const sort = document.getElementById('sortSelect').value;
-
             let filtered = ngos.filter(n=>{
-                const matchesCategory = (category === 'all') || (n.category === category);
+                const matchesCategory = (currentCategory === 'all') || (n.category === currentCategory);
                 const tagsJoined = (n.tags || []).join(' ').toLowerCase();
-                const matchesQuery = !query || (
-                    n.name.toLowerCase().includes(query) ||
-                    n.desc.toLowerCase().includes(query) ||
-                    tagsJoined.includes(query)
+                const matchesQuery = !currentSearchQuery || (
+                    n.name.toLowerCase().includes(currentSearchQuery) ||
+                    n.desc.toLowerCase().includes(currentSearchQuery) ||
+                    tagsJoined.includes(currentSearchQuery)
                 );
                 return matchesCategory && matchesQuery;
             });
 
             // simple sorts
-            if(sort === 'impact'){
+            if(currentSort === 'impact'){
                 filtered.sort((a,b)=>b.impact - a.impact);
-            } else if(sort === 'new'){
+            } else if(currentSort === 'new'){
                 filtered = filtered.slice().reverse(); // placeholder for newest (if we had timestamps)
             }
 
