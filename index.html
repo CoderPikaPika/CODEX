@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ConnectNGO - NGO Networking Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ---------- base & variables (kept from your original) ---------- */
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
+        :root{
+            --primary:#1da324; --secondary:#1b5a19; --accent:#228626;
+            --light:#E8F5E9; --dark:#1B3C1F; --gray:#5f6368; --border:#C8E6C9; --highlight:#81C784;
+        }
+        body{background:#f0f2f5;color:var(--dark)}
+        .container{max-width:1200px;margin:0 auto;padding:0 15px}
+
+        /* ---------- login page ---------- */
+        #login-page{height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+        .login-card{background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);width:400px;padding:30px;text-align:center}
+        .logo{margin-bottom:25px}
+        .logo h1{color:var(--primary);font-size:32px;font-weight:700}
+        .logo span{color:var(--accent)}
+        .logo p{color:var(--gray);font-size:14px;margin-top:5px}
+        .input-group{margin-bottom:20px;text-align:left}
+        .input-group label{display:block;margin-bottom:8px;color:var(--gray);font-weight:500}
+        .input-group input{width:100%;padding:12px 15px;border:1px solid var(--border);border-radius:6px;font-size:16px;transition:all .3s}
+        .input-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(46,125,50,.15)}
+        .btn{padding:12px 20px;border:none;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s}
+        .btn-primary{background:var(--primary);color:#fff;width:100%}
+        .btn-primary:hover{background:var(--secondary)}
+        .login-footer{margin-top:20px;font-size:14px;color:var(--gray)}
+        .login-footer a{color:var(--primary);text-decoration:none}
+
+        /* ---------- navbar ---------- */
+        #dashboard{display:none}
+        .navbar{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:100}
+        .nav-content{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+        .nav-logo{display:flex;align-items:center;gap:10px}
+        .nav-logo h2{color:var(--primary);font-size:22px;margin:0}
+        .nav-search{flex:1;max-width:500px;margin:0 20px}
+        .search-box{display:flex;align-items:center;background:#f0f2f5;border-radius:20px;padding:8px 15px}
+        .search-box input{flex:1;border:none;background:transparent;padding:5px 10px;font-size:14px}
+        .nav-menu{display:flex;align-items:center}
+        .nav-item{margin-left:20px;color:var(--gray);cursor:pointer;text-align:center}
+        .nav-item i{font-size:20px;display:block;margin-bottom:4px}
+        .nav-item.active{color:var(--primary)}
+        .nav-item span{font-size:12px}
+
+        /* ---------- layout ---------- */
+        .main-content{display:flex;margin-top:20px;gap:20px}
+        .left-sidebar{width:25%;background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 5px rgba(0,0,0,.05);height:fit-content}
+        .right-sidebar{width:25%}
+        .feed{flex:1;min-height:400px}
+
+        /* ---------- left sidebar ---------- */
+        .profile-card{text-align:center}
+        .profile-img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid var(--primary)}
+        .profile-card h3{margin-bottom:5px}
+        .profile-card p{color:var(--gray);margin-bottom:15px;font-size:14px}
+        .profile-stats{display:flex;justify-content:space-around;margin:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0}
+        .stat-value{font-weight:700;font-size:18px;color:var(--primary)}
+        .sidebar-links{list-style:none;margin-top:20px}
+        .sidebar-links li{padding:12px 10px;border-radius:6px;margin-bottom:5px;cursor:pointer;display:flex;align-items:center}
+        .sidebar-links li:hover{background:var(--light)}
+        .sidebar-links li.active{background:var(--light);color:var(--primary);font-weight:500}
+        .sidebar-links i{margin-right:10px;font-size:18px}
+
+        /* ---------- right widgets ---------- */
+        .widget{background:#fff;border-radius:10px;padding:15px;margin-bottom:20px;box-shadow:0 2px 5px rgba(0,0,0,.05)}
+        .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+        .widget-header h3{font-size:16px;color:var(--primary)}
+        .news-item{display:flex;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--border)}
+        .news-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+        .event-item{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--border)}
+        .event-date{background:var(--light);color:var(--primary);font-weight:700;padding:8px;border-radius:6px;text-align:center;display:inline-block;margin-bottom:10px}
+
+        /* ---------- NGO explore (new) ---------- */
+        .explore-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px}
+        .filters{display:flex;gap:10px;align-items:center}
+        .filter-select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:#fff}
+        .ngo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+        .ngo-card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .18s}
+        .ngo-card:hover{transform:translateY(-6px)}
+        .ngo-card h3{margin:10px 0;color:var(--primary)}
+        .ngo-icon{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#e8fdef,#d7f6da);font-size:22px;color:var(--primary)}
+        .ngo-tags{margin-top:8px}
+        .ngo-tag{display:inline-block;background:var(--light);color:var(--primary);padding:4px 10px;border-radius:20px;font-size:12px;margin-right:5px;margin-bottom:5px;cursor:pointer}
+        .ngo-tag:hover{background:var(--primary);color:#fff}
+
+        /* follow button styling */
+        .follow-btn{
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight:600;
+        }
+        .follow-btn.followed{
+            background: #dcdcdc;
+            color: #333;
+        }
+
+        /* ---------- NGO profile (in-page) ---------- */
+        .ngo-profile { background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08); }
+        .ngo-banner{width:100%;height:160px;background:#e9f6ee;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:15px}
+        .ngo-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+        .btn-secondary{background:#ddd;color:#333;border-radius:6px;padding:10px 16px;border:none;cursor:pointer}
+        .meta-row{display:flex;gap:12px;align-items:center;color:var(--gray);font-size:14px;margin-top:8px}
+
+        /* ---------- misc ---------- */
+        .muted{color:var(--gray);font-size:14px}
+        @media (max-width:992px){.main-content{flex-direction:column}.left-sidebar,.right-sidebar{width:100%}}
+        @media (max-width:768px){.nav-search{display:none}.nav-menu{width:100%;justify-content:space-around}.nav-item{margin-left:0}}
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOGIN ===== -->
+    <div id="login-page">
+        <div class="login-card">
+            <div class="logo">
+                <h1>Connect<span>NGO</span></h1>
+                <p>Empowering NGOs through collaboration</p>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button class="btn btn-primary" onclick="login()">Sign In</button>
+            <div class="login-footer">
+                <p>Don't have an account? <a href="#">Register your NGO</a></p>
+                <p><a href="#">Forgot password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container nav-content">
+                <div class="nav-logo">
+                    <i class="fas fa-globe" style="color:var(--primary);font-size:26px"></i>
+                    <h2>ConnectNGO</h2>
+                </div>
+
+                <div class="nav-search">
+                    <div class="search-box">
+                        <i class="fas fa-search" style="color:var(--gray);margin-right:8px"></i>
+                        <input id="globalSearch" type="text" placeholder="Search for NGOs, opportunities, events..." oninput="renderNGOList()">
+                    </div>
+                </div>
+
+                <div class="nav-menu">
+                    <div class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Network</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Collaborate</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <div class="container main-content">
+            <!-- LEFT SIDEBAR -->
+            <aside class="left-sidebar">
+                <div class="profile-card">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Profile" class="profile-img">
+                    <h3 id="userName">Sarah Johnson</h3>
+                    <p id="userRole">Director at GreenEarth Initiative</p>
+                    <div class="profile-stats">
+                        <div class="stat"><div class="stat-value">342</div><div class="stat-label">Connections</div></div>
+                        <div class="stat"><div class="stat-value">28</div><div class="stat-label">Projects</div></div>
+                    </div>
+                </div>
+
+                <div class="impact-counter">
+                    <h3>Your Impact</h3>
+                    <div class="impact-stats">
+                        <div class="impact-stat"><div class="impact-value">5.2K</div><div class="impact-label">Lives Impacted</div></div>
+                        <div class="impact-stat"><div class="impact-value">128</div><div class="impact-label">Partners</div></div>
+                    </div>
+                </div>
+
+                <ul class="sidebar-links">
+                    <li class="active"><i class="fas fa-user"></i> My Profile</li>
+                    <li><i class="fas fa-users"></i> My NGOs</li>
+                    <li><i class="fas fa-calendar"></i> Events</li>
+                    <li><i class="fas fa-hand-holding-heart"></i> Volunteers</li>
+                    <li><i class="fas fa-donate"></i> Donations</li>
+                    <li><i class="fas fa-chart-line"></i> Impact Analytics</li>
+                    <li><i class="fas fa-bookmark"></i> Saved Items</li>
+                </ul>
+            </aside>
+
+            <!-- FEED / EXPLORE (CENTER) -->
+            <main class="feed" id="feedArea">
+                <!-- Explore top controls -->
+                <div class="explore-top">
+                    <div>
+                        <h2 style="margin-bottom:6px">Explore NGOs</h2>
+                        <p class="muted">Find organizations by cause, location or interests — click a card to view full profile.</p>
+                    </div>
+                    <div class="filters">
+                        <select id="categoryFilter" class="filter-select" onchange="renderNGOList()">
+                            <option value="all">All categories</option>
+                            <option value="education">Education</option>
+                            <option value="health">Health</option>
+                            <option value="environment">Environment</option>
+                            <option value="women">Women Empowerment</option>
+                            <option value="poverty">Poverty Alleviation</option>
+                        </select>
+                        <select id="sortSelect" class="filter-select" onchange="renderNGOList()">
+                            <option value="relevance">Sort: Relevance</option>
+                            <option value="impact">Sort: Impact</option>
+                            <option value="new">Sort: Newest</option>
+                        </select>
+                        <button class="btn" onclick="renderNGOList()">Apply</button>
+                    </div>
+                </div>
+
+                <!-- NGO GRID (rendered dynamically) -->
+                <div id="ngoGrid" class="ngo-grid" aria-live="polite"></div>
+
+                <!-- NGO Profile view (hidden by default) -->
+                <div id="ngoProfileView" style="display:none;margin-top:18px">
+                    <div class="ngo-profile" id="ngoProfileContent"></div>
+                    <div style="text-align:center;margin-top:14px">
+                        <button class="btn btn-secondary" onclick="showExplore()">← Back to Explore</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT SIDEBAR -->
+            <aside class="right-sidebar">
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>NGO News & Updates</h3>
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="news-item"><div class="news-content"><h4>Global Fund announces new grants for environmental projects</h4><p>Top story • 2,843 readers</p></div></div>
+                    <div class="news-item"><div class="news-content"><h4>How NGOs are adapting to digital transformation</h4><p>Trending in Technology • 1,592 readers</p></div></div>
+                    <div class="news-item"><div class="news-content"><h4>New regulations for international nonprofit operations</h4><p>Policy • 932 readers</p></div></div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header"><h3>Upcoming NGO Events</h3><i class="fas fa-calendar"></i></div>
+                    <div class="event-item"><div class="event-date">Jun 15</div><h4>NGO Leadership Summit</h4><p>Virtual Event • 10:00 AM</p></div>
+                    <div class="event-item"><div class="event-date">Jun 22</div><h4>Fundraising Strategies Workshop</h4><p>San Francisco • 2:00 PM</p></div>
+                    <div class="event-item"><div class="event-date">Jul 5</div><h4>Global Health Conference</h4><p>New York • 9:00 AM</p></div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header"><h3>Suggested NGOs to Follow</h3><i class="fas fa-users"></i></div>
+                    <div class="news-item"><div class="news-content"><h4>HealthFirst Worldwide</h4><p>125 mutual connections</p></div></div>
+                    <div class="news-item"><div class="news-content"><h4>Future Forests</h4><p>87 mutual connections</p></div></div>
+                    <div class="news-item"><div class="news-content"><h4>Education Without Borders</h4><p>64 mutual connections</p></div></div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header"><h3>Resources & Tools</h3><i class="fas fa-toolbox"></i></div>
+                    <div class="event-item"><h4>Grant Writing Guide</h4><p>Download our free guide</p></div>
+                    <div class="event-item"><h4>Volunteer Management</h4><p>Best practices webinar</p></div>
+                    <div class="event-item"><h4>Impact Measurement</h4><p>Tools and templates</p></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        /* ---------- sample NGO data (replace with API later) ---------- */
+        const ngos = [
+            {
+                id: 'education',
+                name: 'Education for All',
+                category: 'education',
+                location: 'Rural India',
+                impact: 42000,
+                desc: 'Providing free & quality education to rural children via mobile classrooms and teacher training.',
+                tags: ['#Education', '#RemoteLearning', '#VolunteersNeeded'],
+                contact: 'contact@educationforall.org',
+                website: 'https://educationforall.example',
+                banner: '', // optional banner URL
+                logoIcon: 'fa-book',
+                followed: false
+            },
+            {
+                id: 'health',
+                name: 'HealthFirst',
+                category: 'health',
+                location: 'Multiple States',
+                impact: 81000,
+                desc: 'Affordable primary healthcare, mobile clinics and maternal health programs for underserved families.',
+                tags: ['#Health', '#MaternalCare'],
+                contact: 'support@healthfirst.org',
+                website: 'https://healthfirst.example',
+                banner: '',
+                logoIcon: 'fa-heartbeat',
+                followed: false
+            },
+            {
+                id: 'environment',
+                name: 'Future Forests',
+                category: 'environment',
+                location: 'Global',
+                impact: 120000,
+                desc: 'Reforestation campaigns, community tree-planting and climate education programs.',
+                tags: ['#Reforestation', '#ClimateAction'],
+                contact: 'hello@futureforests.org',
+                website: 'https://futureforests.example',
+                banner: '',
+                logoIcon: 'fa-tree',
+                followed: false
+            },
+            {
+                id: 'women',
+                name: 'WomenRise',
+                category: 'women',
+                location: 'Urban & Rural',
+                impact: 23000,
+                desc: 'Women empowerment through skill-building, legal aid & microfinance support.',
+                tags: ['#WomenEmpowerment', '#Microfinance'],
+                contact: 'info@womenrise.org',
+                website: 'https://womenrise.example',
+                banner: '',
+                logoIcon: 'fa-female',
+                followed: false
+            },
+            {
+                id: 'poverty',
+                name: 'LiftUp',
+                category: 'poverty',
+                location: 'Regional',
+                impact: 54000,
+                desc: 'Economic uplift programs, vocational training and food-security initiatives.',
+                tags: ['#PovertyAlleviation', '#Livelihoods'],
+                contact: 'hello@liftup.org',
+                website: 'https://liftup.example',
+                banner: '',
+                logoIcon: 'fa-hands-helping',
+                followed: false
+            }
+        ];
+
+        /* ---------- login ---------- */
+        function login(){
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if(email && password){
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                renderNGOList();
+            } else {
+                alert('Please enter both email and password');
+            }
+        }
+
+        /* ---------- tag search (clickable tags) ---------- */
+        function tagSearch(e, tag){
+            e.stopPropagation();
+            const input = document.getElementById('globalSearch');
+            input.value = tag;
+            renderNGOList();
+        }
+
+        /* ---------- rendering list ---------- */
+        function renderNGOList(){
+            // show explore view
+            showExplore(false);
+
+            const grid = document.getElementById('ngoGrid');
+            grid.innerHTML = '';
+
+            const query = (document.getElementById('globalSearch')?.value || '').toLowerCase().trim();
+            const category = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortSelect').value;
+
+            let filtered = ngos.filter(n=>{
+                const matchesCategory = (category === 'all') || (n.category === category);
+                const tagsJoined = (n.tags || []).join(' ').toLowerCase();
+                const matchesQuery = !query || (
+                    n.name.toLowerCase().includes(query) ||
+                    n.desc.toLowerCase().includes(query) ||
+                    tagsJoined.includes(query)
+                );
+                return matchesCategory && matchesQuery;
+            });
+
+            // simple sorts
+            if(sort === 'impact'){
+                filtered.sort((a,b)=>b.impact - a.impact);
+            } else if(sort === 'new'){
+                filtered = filtered.slice().reverse(); // placeholder for newest (if we had timestamps)
+            }
+
+            if(filtered.length === 0){
+                grid.innerHTML = '<p class="muted">No NGOs found. Try another filter or search term.</p>';
+                return;
+            }
+
+            filtered.forEach(n=>{
+                const card = document.createElement('div');
+                card.className = 'ngo-card';
+                // Build tags with clickable onclick to filter by tag
+                const tagsHtml = (n.tags || []).map(t=>{
+                    // escape single quotes in tag for safe inline handler
+                    const safe = t.replace(/'/g, "\\'");
+                    return `<span class="ngo-tag" onclick="tagSearch(event,'${safe}')">${t}</span>`;
+                }).join('');
+                card.innerHTML = `
+                    <div style="display:flex;gap:12px;align-items:center">
+                        <div class="ngo-icon"><i class="fa ${n.logoIcon}"></i></div>
+                        <div style="flex:1">
+                            <h3>${n.name}</h3>
+                            <div class="muted">${n.location} • ${n.category}</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:12px">${n.desc.length>120 ? n.desc.slice(0,120)+'…' : n.desc}</p>
+                    <div class="ngo-tags">${tagsHtml}</div>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn" onclick="showProfile('${n.id}')">View Profile</button>
+                        <button class="follow-btn ${n.followed ? 'followed' : ''}" onclick="followNGO(event,this,'${n.id}')">
+                            ${n.followed ? `<i class="fas fa-check" style="margin-right:8px"></i>Followed` : `<i class="fas fa-plus" style="margin-right:8px"></i>Follow`}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* ---------- follow/unfollow toggle ----------
+           - toggles the `followed` property on the NGO object
+           - updates either the grid or the profile view depending on which is visible
+        */
+        function followNGO(e, btn, id){
+            e.stopPropagation();
+            const ngo = ngos.find(x=>x.id === id);
+            if(!ngo) return;
+
+            // toggle state
+            ngo.followed = !ngo.followed;
+
+            // If profile view is currently visible for this NGO, refresh it.
+            // Otherwise refresh the NGO grid/list.
+            const profileVisible = document.getElementById('ngoProfileView').style.display === 'block';
+            if(profileVisible){
+                // re-render profile for this NGO (keeps user on profile page)
+                showProfile(id);
+            } else {
+                renderNGOList();
+            }
+        }
+
+        /* ---------- show profile ---------- */
+        function showProfile(id){
+            const n = ngos.find(x=>x.id === id);
+            if(!n) return alert('NGO not found');
+
+            // hide grid, show profile view
+            document.getElementById('ngoGrid').style.display = 'none';
+            const profileView = document.getElementById('ngoProfileView');
+            profileView.style.display = 'block';
+
+            // populate profile content
+            const content = document.getElementById('ngoProfileContent');
+
+            const tagsHtml = (n.tags || []).map(t=>{
+                const safe = t.replace(/'/g, "\\'");
+                return `<span class="ngo-tag" onclick="tagSearch(event,'${safe}')">${t}</span>`;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="ngo-banner">${n.banner ? `<img src="${n.banner}" style="width:100%;height:100%;object-fit:cover;border-radius:6px">` : `<div style="font-size:18px;color:var(--primary)">${n.name}</div>`}</div>
+                <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+                    <div style="min-width:120px">
+                        <div class="ngo-icon" style="width:120px;height:120px;border-radius:12px;font-size:40px"><i class="fa ${n.logoIcon}"></i></div>
+                    </div>
+                    <div style="flex:1">
+                        <h2 style="margin:0">${n.name}</h2>
+                        <div class="meta-row">
+                            <div><i class="fas fa-map-marker-alt" style="margin-right:8px"></i>${n.location}</div>
+                            <div>•</div>
+                            <div><strong>Impact:</strong> ${n.impact.toLocaleString()}</div>
+                            <div>•</div>
+                            <div class="muted">${n.category}</div>
+                        </div>
+                        <p style="margin-top:12px">${n.desc}</p>
+
+                        <div class="ngo-tags" style="margin-top:6px">${tagsHtml}</div>
+
+                        <div class="ngo-actions" style="margin-top:12px">
+                            <button class="btn" onclick="donate('${n.id}')"><i class="fas fa-donate" style="margin-right:8px"></i>Donate</button>
+                            <button class="btn btn-secondary" onclick="join('${n.id}')"><i class="fas fa-handshake" style="margin-right:8px"></i>Join / Volunteer</button>
+                            <button class="btn btn-secondary" onclick="share('${n.id}')"><i class="fas fa-share" style="margin-right:8px"></i>Share</button>
+                            <a class="btn btn-secondary" href="${n.website}" target="_blank" rel="noopener">Visit Website</a>
+
+                            <!-- follow button on profile uses same handler -->
+                            <button style="margin-left:10px" class="follow-btn ${n.followed ? 'followed' : ''}" onclick="followNGO(event,this,'${n.id}')">
+                                ${n.followed ? `<i class="fas fa-check" style="margin-right:8px"></i>Followed` : `<i class="fas fa-plus" style="margin-right:8px"></i>Follow`}
+                            </button>
+                        </div>
+
+                        <div style="margin-top:12px">
+                            <strong>Contact:</strong> <a href="mailto:${n.contact}">${n.contact}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px">
+                    <h4>Recent updates</h4>
+                    <div class="post" style="margin-top:8px;padding:12px">
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" alt="" style="width:48px;height:48px;border-radius:8px;object-fit:cover">
+                            <div>
+                                <strong>${n.name}</strong>
+                                <div class="muted" style="font-size:13px">2h ago</div>
+                            </div>
+                        </div>
+                        <p style="margin-top:10px">${n.name} — sample update about recent project highlights. (Replace with real content from API)</p>
+                    </div>
+                </div>
+            `;
+            // scroll to profile
+            content.scrollIntoView({behavior:'smooth'});
+        }
+
+        function showExplore(scroll=true){
+            document.getElementById('ngoGrid').style.display = 'grid';
+            document.getElementById('ngoProfileView').style.display = 'none';
+            if(scroll) document.getElementById('ngoGrid').scrollIntoView({behavior:'smooth'});
+        }
+
+        /* ---------- small actions ---------- */
+        function donate(id){ alert('Open donate flow for ' + id); }
+        function join(id){ alert('Open join/volunteer flow for ' + id); }
+        function share(id){ navigator.share ? navigator.share({title:'Check this NGO',text:'Take a look at '+id,url:location.href}) : alert('Share this NGO: ' + id); }
+
+        // initial: nothing until login
+    </script>
+</body>
+</html>
