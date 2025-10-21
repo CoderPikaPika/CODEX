@@ -1,202 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ConnectNGO - NGO Networking Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* ---------- base & variables (kept from your original) ---------- */
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
-        :root{
-            --primary:#1da324; --secondary:#1b5a19; --accent:#228626;
-            --light:#E8F5E9; --dark:#1B3C1F; --gray:#5f6368; --border:#C8E6C9; --highlight:#81C784;
-        }
-        body{background:#f0f2f5;color:var(--dark)}
-        .container{max-width:1200px;margin:0 auto;padding:0 15px}
-
-        /* ---------- login page ---------- */
-        #login-page{height:100vh;display:flex;align-items:center;justify-content:center;background:
-            linear-gradient(135deg, rgba(29,163,36,0.75) 0%, rgba(27,90,25,0.75) 100%),
-            url('https://shyamprayaasfoundation.org/wp-content/uploads/2022/02/e1.jpg');
-            background-size:cover;background-position:center;background-repeat:no-repeat}
-        .login-card{background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);width:400px;padding:30px;text-align:center}
-        .logo{margin-bottom:25px}
-        .logo h1{color:var(--primary);font-size:32px;font-weight:700}
-        .logo span{color:var(--accent)}
-        .logo p{color:var(--gray);font-size:14px;margin-top:5px}
-        .input-group{margin-bottom:20px;text-align:left}
-        .input-group label{display:block;margin-bottom:8px;color:var(--gray);font-weight:500}
-        .input-group input{width:100%;padding:12px 15px;border:1px solid var(--border);border-radius:6px;font-size:16px;transition:all .3s}
-        .input-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(46,125,50,.15)}
-        .btn{padding:12px 20px;border:none;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s}
-        .btn-primary{background:var(--primary);color:#fff;width:100%}
-        .btn-primary:hover{background:var(--secondary);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.12)}
-        .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
-        .btn:active{transform:translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-        .login-footer{margin-top:20px;font-size:14px;color:var(--gray)}
-        .login-footer a{color:var(--primary);text-decoration:none}
-
-        /* ---------- navbar ---------- */
-        #dashboard{display:none}
-        .navbar{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:100}
-        .nav-content{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
-        .nav-logo{display:flex;align-items:center;gap:10px}
-        .nav-logo h2{color:var(--primary);font-size:22px;margin:0}
-        .nav-search{flex:1;max-width:500px;margin:0 20px}
-        .search-box{display:flex;align-items:center;background:#f0f2f5;border-radius:20px;padding:8px 15px}
-        .search-box input{flex:1;border:none;background:transparent;padding:5px 10px;font-size:14px}
-        .nav-menu{display:flex;align-items:center}
-        .nav-item{margin-left:20px;color:var(--gray);cursor:pointer;text-align:center}
-        .nav-item i{font-size:20px;display:block;margin-bottom:4px}
-        .nav-item{position:relative}
-        .nav-item.active{color:var(--primary)}
-        .nav-item.active::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-8px;width:24px;height:3px;background:var(--primary);border-radius:3px}
-        .nav-item span{font-size:12px}
-
-        /* ---------- layout ---------- */
-        .main-content{display:flex;margin-top:20px;gap:20px}
-        .left-sidebar{width:25%;background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 5px rgba(0,0,0,.05);height:fit-content}
-        .right-sidebar{width:25%}
-        .feed{flex:1;min-height:400px}
-
-        /* ---------- left sidebar ---------- */
-        .profile-card{text-align:center}
-        .profile-img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid var(--primary)}
-        .profile-card h3{margin-bottom:5px}
-        .profile-card p{color:var(--gray);margin-bottom:15px;font-size:14px}
-        .profile-stats{display:flex;justify-content:space-around;margin:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0}
-        .stat-value{font-weight:700;font-size:18px;color:var(--primary)}
-        .sidebar-links{list-style:none;margin-top:20px}
-        .sidebar-links li{padding:12px 10px;border-radius:6px;margin-bottom:5px;cursor:pointer;display:flex;align-items:center}
-        .sidebar-links li:hover{background:var(--light)}
-        .sidebar-links li.active{background:var(--light);color:var(--primary);font-weight:500}
-        .sidebar-links i{margin-right:10px;font-size:18px}
-
-        /* ---------- right widgets ---------- */
-        .widget{background:#fff;border-radius:10px;padding:15px;margin-bottom:20px;box-shadow:0 2px 5px rgba(0,0,0,.05)}
-        .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border)}
-        .widget-header h3{font-size:16px;color:var(--primary)}
-        .news-item{display:flex;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--border)}
-        .news-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-        .event-item{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--border)}
-        .event-date{background:var(--light);color:var(--primary);font-weight:700;padding:8px;border-radius:6px;text-align:center;display:inline-block;margin-bottom:10px}
-
-        /* ---------- NGO explore (new) ---------- */
-        .explore-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px}
-        .filters{display:flex;gap:10px;align-items:center}
-        .filter-select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:#fff}
-        .ngo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-        .ngo-card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .18s}
-        .ngo-card:hover{transform:translateY(-6px);box-shadow:0 10px 24px rgba(0,0,0,.12)}
-        .ngo-card h3{margin:10px 0;color:var(--primary)}
-        .ngo-icon{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#e8fdef,#d7f6da);font-size:22px;color:var(--primary)}
-        .ngo-tags{margin-top:8px}
-        .ngo-tag{display:inline-block;background:var(--light);color:var(--primary);padding:4px 10px;border-radius:20px;font-size:12px;margin-right:5px;margin-bottom:5px;cursor:pointer}
-        .ngo-tag:hover{background:var(--primary);color:#fff}
-
-        /* follow button styling */
-        .follow-btn{
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight:600;
-        }
-        .follow-btn.followed{
-            background: #dcdcdc;
-            color: #333;
-        }
-
-        /* ---------- NGO profile (in-page) ---------- */
-        .ngo-profile { background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08); }
-        .ngo-banner{width:100%;height:160px;background:#e9f6ee;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:15px}
-        .ngo-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-        .btn-secondary{background:#ddd;color:#333;border-radius:6px;padding:10px 16px;border:none;cursor:pointer}
-        .btn-secondary:hover{background:#cfcfcf}
-        .meta-row{display:flex;gap:12px;align-items:center;color:var(--gray);font-size:14px;margin-top:8px}
-
-        /* ---------- Profile Page ---------- */
-        .profile-page { display: none; }
-        .profile-header { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,.05); position: relative; }
-        .profile-banner { height: 200px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-radius: 8px; margin-bottom: 20px; position: relative; overflow: hidden; }
-        .profile-avatar { position: absolute; bottom: -50px; left: 30px; width: 120px; height: 120px; border-radius: 50%; border: 4px solid #fff; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
-        .profile-info { margin-top: 60px; padding-left: 170px; }
-        .profile-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .profile-tab { padding: 10px 20px; cursor: pointer; }
-        .profile-tab.active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: 600; }
-        .profile-content { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,.05); }
-        .profile-section { margin-bottom: 30px; }
-        .profile-section:last-child { margin-bottom: 0; }
-        .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .profile-card-small { background: var(--light); border-radius: 8px; padding: 15px; }
-        
-        /* ---------- Network Page ---------- */
-        .network-page { display: none; }
-        .connections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .connection-card { background: #fff; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,.05); }
-        .connection-card:hover{ box-shadow:0 10px 24px rgba(0,0,0,.12); transform: translateY(-4px); transition: transform .18s, box-shadow .18s }
-        .connection-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; }
-        
-        /* ---------- Collaborate Page ---------- */
-        .collaborate-page { display: none; }
-        .project-card { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,.05); }
-        .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        
-        /* ---------- Alerts Page ---------- */
-        .alerts-page { display: none; }
-        .alert-item { background: #fff; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,.05); display: flex; align-items: flex-start; gap: 15px; }
-        .alert-icon { background: var(--light); color: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        
-        /* ---------- misc ---------- */
-        .muted{color:var(--gray);font-size:14px}
-        .page-title { margin-bottom: 20px; }
-        @media (max-width:992px){.main-content{flex-direction:column}.left-sidebar,.right-sidebar{width:100%}}
-        @media (max-width:768px){.nav-search{display:none}.nav-menu{width:100%;justify-content:space-around}.nav-item{margin-left:0}.profile-avatar{left:20px;width:100px;height:100px;bottom:-40px}.profile-info{margin-top:50px;padding-left:0;margin-left:0}.profile-banner{height:160px}}
-
-        /* ---------- Toasts ---------- */
-        #toast-container{position:fixed;top:20px;right:20px;display:flex;flex-direction:column;gap:10px;z-index:1000}
-        .toast{background:#fff;color:#222;border-left:4px solid var(--primary);padding:12px 14px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.12);min-width:240px;max-width:360px;animation:slideIn .25s ease forwards}
-        .toast.success{border-left-color:var(--primary)}
-        .toast.info{border-left-color:#2196f3}
-        .toast.warn{border-left-color:#ff9800}
-        .toast .title{font-weight:700;margin-bottom:4px}
-        @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes fadeOut{to{opacity:0;transform:translateY(-6px)}}
-
-        /* ---------- Competitions / Leaderboard ---------- */
-        .leaderboard{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:16px}
-        .leaderboard h3{color:var(--primary);margin-bottom:10px}
-        .lb-row{display:flex;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid var(--border)}
-        .lb-row:last-child{border-bottom:none}
-        .lb-rank{width:28px;height:28px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700;margin-right:10px}
-        .lb-user{display:flex;align-items:center;gap:10px}
-        .lb-points{font-weight:700}
-        .challenge{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:16px}
-        .progress{background:#eef3ee;border-radius:8px;height:10px;overflow:hidden}
-        .progress > div{background:var(--primary);height:100%;width:0;transition:width .3s ease}
-        .league-card{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-        .league-left{display:flex;align-items:center;gap:12px}
-        .league-badge{display:inline-block;padding:6px 10px;border-radius:16px;font-size:12px;color:#fff;font-weight:700}
-        .league-bronze{background:linear-gradient(135deg,#b87333,#8c5a21)}
-        .league-silver{background:linear-gradient(135deg,#c0c0c0,#9e9e9e)}
-        .league-gold{background:linear-gradient(135deg,#ffd54f,#d4a017)}
-        .league-crystal{background:linear-gradient(135deg,#b3e5fc,#81d4fa);color:#0b3954}
-        .league-master{background:linear-gradient(135deg,#b39ddb,#7e57c2)}
-        .league-champion{background:linear-gradient(135deg,#ef5350,#c62828)}
-        .league-titan{background:linear-gradient(135deg,#90a4ae,#607d8b)}
-        .league-legend{background:linear-gradient(135deg,#ab47bc,#6a1b9a)}
-
-        /* ---------- Modal ---------- */
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1100;padding:16px}
-        .modal-box{background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:640px;width:100%;padding:18px}
-        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-        .modal-header h3{margin:0;color:var(--primary)}
-        .close-btn{background:#eee;border:none;border-radius:6px;padding:6px 10px;cursor:pointer}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- ===== LOGIN ===== -->
@@ -214,7 +26,7 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password">
             </div>
-            <button class="btn btn-primary" onclick="login()">Sign In</button>
+            <button class="btn btn-primary" onclick=login()>Sign In</button>
             <div class="login-footer">
                 <p>Don't have an account? <a href="#">Register your NGO</a></p>
                 <p><a href="#">Forgot password?</a></p>
@@ -273,20 +85,33 @@
             <!-- LEFT SIDEBAR -->
             <aside class="left-sidebar">
                 <div class="profile-card">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Profile" class="profile-img">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
+                        alt="Profile" class="profile-img">
                     <h3 id="userName">Azam</h3>
                     <p id="userRole">Director at GreenEarth Initiative</p>
                     <div class="profile-stats">
-                        <div class="stat"><div class="stat-value">342</div><div class="stat-label">Connections</div></div>
-                        <div class="stat"><div class="stat-value">28</div><div class="stat-label">Projects</div></div>
+                        <div class="stat">
+                            <div class="stat-value">342</div>
+                            <div class="stat-label">Connections</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="impact-counter">
                     <h3>Your Impact</h3>
                     <div class="impact-stats">
-                        <div class="impact-stat"><div class="impact-value">5.2K</div><div class="impact-label">Lives Impacted</div></div>
-                        <div class="impact-stat"><div class="impact-value">128</div><div class="impact-label">Partners</div></div>
+                        <div class="impact-stat">
+                            <div class="impact-value">5.2K</div>
+                            <div class="impact-label">Lives Impacted</div>
+                        </div>
+                        <div class="impact-stat">
+                            <div class="impact-value">128</div>
+                            <div class="impact-label">Partners</div>
+                        </div>
                     </div>
                 </div>
 
@@ -309,7 +134,8 @@
                     <div class="explore-top">
                         <div>
                             <h2 style="margin-bottom:6px">Explore NGOs</h2>
-                            <p class="muted">Find organizations by cause, location or interests — click a card to view full profile.</p>
+                            <p class="muted">Find organizations by cause, location or interests — click a card to view
+                                full profile.</p>
                         </div>
                         <div class="filters">
                             <select id="categoryFilter" class="filter-select">
@@ -346,16 +172,27 @@
                     <div class="profile-header">
                         <div class="profile-banner"></div>
                         <div class="profile-avatar">
-                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
+                                alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover">
                         </div>
                         <div class="profile-info">
                             <h2>Sarah Johnson</h2>
                             <p>Director at GreenEarth Initiative</p>
                             <p class="muted">New York, USA | Environmental Conservation & Sustainability</p>
-                            <div class="profile-stats" style="justify-content:flex-start;gap:30px;border:none;padding:10px 0">
-                                <div class="stat"><div class="stat-value">342</div><div class="stat-label">Connections</div></div>
-                                <div class="stat"><div class="stat-value">28</div><div class="stat-label">Projects</div></div>
-                                <div class="stat"><div class="stat-value">5.2K</div><div class="stat-label">Lives Impacted</div></div>
+                            <div class="profile-stats"
+                                style="justify-content:flex-start;gap:30px;border:none;padding:10px 0">
+                                <div class="stat">
+                                    <div class="stat-value">342</div>
+                                    <div class="stat-label">Connections</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">28</div>
+                                    <div class="stat-label">Projects</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">5.2K</div>
+                                    <div class="stat-label">Lives Impacted</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -371,7 +208,10 @@
                         <div id="about-tab">
                             <div class="profile-section">
                                 <h3>About</h3>
-                                <p>Passionate environmentalist with over 10 years of experience in sustainable development and conservation projects. Director at GreenEarth Initiative, leading a team of 25 professionals working across 5 countries to promote environmental sustainability and community resilience.</p>
+                                <p>Passionate environmentalist with over 10 years of experience in sustainable
+                                    development and conservation projects. Director at GreenEarth Initiative, leading a
+                                    team of 25 professionals working across 5 countries to promote environmental
+                                    sustainability and community resilience.</p>
                             </div>
 
                             <div class="profile-section">
@@ -379,12 +219,14 @@
                                 <div class="profile-card-small">
                                     <h4>Director, GreenEarth Initiative</h4>
                                     <p class="muted">2018 - Present · 5 yrs 3 mos</p>
-                                    <p>Leading strategic planning, fundraising, and implementation of conservation projects across multiple regions.</p>
+                                    <p>Leading strategic planning, fundraising, and implementation of conservation
+                                        projects across multiple regions.</p>
                                 </div>
                                 <div class="profile-card-small" style="margin-top:15px">
                                     <h4>Project Manager, World Conservation Society</h4>
                                     <p class="muted">2014 - 2018 · 4 yrs</p>
-                                    <p>Managed community-based conservation initiatives in Southeast Asia, focusing on rainforest preservation.</p>
+                                    <p>Managed community-based conservation initiatives in Southeast Asia, focusing on
+                                        rainforest preservation.</p>
                                 </div>
                             </div>
 
@@ -454,17 +296,20 @@
                             <h3>Your Connections</h3>
                             <div class="connections-grid">
                                 <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
                                     <h4>Michael Chen</h4>
                                     <p class="muted">EcoSolutions</p>
                                 </div>
                                 <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
                                     <h4>Priya Sharma</h4>
                                     <p class="muted">HealthFirst Worldwide</p>
                                 </div>
                                 <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
                                     <h4>David Wilson</h4>
                                     <p class="muted">Future Forests</p>
                                 </div>
@@ -478,7 +323,8 @@
                                     <h4>Community Reforestation Program</h4>
                                     <span class="stat-value">Ongoing</span>
                                 </div>
-                                <p>Planting 10,000 native trees in deforested areas with local community participation.</p>
+                                <p>Planting 10,000 native trees in deforested areas with local community participation.
+                                </p>
                                 <p class="muted">12 partners · 342 volunteers · 65% complete</p>
                             </div>
                             <div class="project-card">
@@ -486,7 +332,8 @@
                                     <h4>Clean Water Initiative</h4>
                                     <span class="stat-value">Completed</span>
                                 </div>
-                                <p>Providing clean drinking water solutions to 5 remote villages through well installation and water purification systems.</p>
+                                <p>Providing clean drinking water solutions to 5 remote villages through well
+                                    installation and water purification systems.</p>
                                 <p class="muted">8 partners · 2,140 beneficiaries</p>
                             </div>
                         </div>
@@ -505,7 +352,8 @@
                     <h2 class="page-title">Your Network</h2>
                     <div class="connections-grid">
                         <div class="connection-card">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
                             <h4>Michael Chen</h4>
                             <p class="muted">EcoSolutions</p>
                             <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -514,7 +362,8 @@
                             </div>
                         </div>
                         <div class="connection-card">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
                             <h4>Priya Sharma</h4>
                             <p class="muted">HealthFirst Worldwide</p>
                             <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -523,7 +372,8 @@
                             </div>
                         </div>
                         <div class="connection-card">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
                             <h4>David Wilson</h4>
                             <p class="muted">Future Forests</p>
                             <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -532,7 +382,8 @@
                             </div>
                         </div>
                         <div class="connection-card">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" class="connection-img">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
                             <h4>Emily Rodriguez</h4>
                             <p class="muted">Education for All</p>
                             <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -546,33 +397,36 @@
                 <!-- COLLABORATE PAGE -->
                 <div id="collaborate-page" class="collaborate-page">
                     <h2 class="page-title">Collaboration Opportunities</h2>
-                    
+
                     <div class="project-card">
                         <div class="project-header">
                             <h4>Community Reforestation Program</h4>
                             <span class="stat-value">Seeking Partners</span>
                         </div>
-                        <p>We're looking for NGOs with expertise in community engagement to join our reforestation initiative in Southeast Asia.</p>
+                        <p>We're looking for NGOs with expertise in community engagement to join our reforestation
+                            initiative in Southeast Asia.</p>
                         <p class="muted">Deadline: June 30, 2023 · 5 partners needed</p>
                         <button class="btn" style="margin-top:10px">Express Interest</button>
                     </div>
-                    
+
                     <div class="project-card">
                         <div class="project-header">
                             <h4>Digital Literacy for Rural Women</h4>
                             <span class="stat-value">Volunteers Needed</span>
                         </div>
-                        <p>Help us train 500 women in digital skills across rural communities. We need trainers and technical support.</p>
+                        <p>Help us train 500 women in digital skills across rural communities. We need trainers and
+                            technical support.</p>
                         <p class="muted">Starting: July 15, 2023 · 20 volunteers needed</p>
                         <button class="btn" style="margin-top:10px">Join Project</button>
                     </div>
-                    
+
                     <div class="project-card">
                         <div class="project-header">
                             <h4>Clean Water Initiative Expansion</h4>
                             <span class="stat-value">Funding Partners</span>
                         </div>
-                        <p>Seeking funding partners to expand our successful clean water program to 10 additional communities.</p>
+                        <p>Seeking funding partners to expand our successful clean water program to 10 additional
+                            communities.</p>
                         <p class="muted">Goal: $250,000 · 3 funding partners needed</p>
                         <button class="btn" style="margin-top:10px">Learn More</button>
                     </div>
@@ -581,7 +435,7 @@
                 <!-- ALERTS PAGE -->
                 <div id="alerts-page" class="alerts-page">
                     <h2 class="page-title">Notifications</h2>
-                    
+
                     <div class="alert-item">
                         <div class="alert-icon"><i class="fas fa-handshake"></i></div>
                         <div>
@@ -593,7 +447,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="alert-item">
                         <div class="alert-icon"><i class="fas fa-calendar"></i></div>
                         <div>
@@ -602,7 +456,7 @@
                             <button class="btn" style="margin-top:10px">View Details</button>
                         </div>
                     </div>
-                    
+
                     <div class="alert-item">
                         <div class="alert-icon"><i class="fas fa-donate"></i></div>
                         <div>
@@ -611,7 +465,7 @@
                             <button class="btn" style="margin-top:10px">Apply Now</button>
                         </div>
                     </div>
-                    
+
                     <div class="alert-item">
                         <div class="alert-icon"><i class="fas fa-users"></i></div>
                         <div>
@@ -624,9 +478,11 @@
 
                 <!-- COMPETITIONS PAGE -->
                 <div id="competitions-page" style="display:none">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px" class="page-title">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"
+                        class="page-title">
                         <h2 style="margin:0">Weekly Donation Competition</h2>
-                        <button class="btn btn-secondary" onclick="openLeagueInfo()"><i class="fas fa-info-circle" style="margin-right:6px"></i>How Leagues Work</button>
+                        <button class="btn btn-secondary" onclick="openLeagueInfo()"><i class="fas fa-info-circle"
+                                style="margin-right:6px"></i>How Leagues Work</button>
                     </div>
                     <div id="yourLeagueCard" class="league-card">
                         <div class="league-left">
@@ -637,8 +493,11 @@
                             </div>
                         </div>
                         <div style="min-width:220px">
-                            <div class="progress"><div id="leagueProgressBar" style="width:0%"></div></div>
-                            <div id="leagueProgressText" class="muted" style="margin-top:6px;text-align:right">0 / 100 to next league</div>
+                            <div class="progress">
+                                <div id="leagueProgressBar" style="width:0%"></div>
+                            </div>
+                            <div id="leagueProgressText" class="muted" style="margin-top:6px;text-align:right">0 / 100
+                                to next league</div>
                         </div>
                     </div>
                     <div class="leaderboard" style="margin-bottom:16px">
@@ -647,8 +506,11 @@
                     </div>
                     <div class="challenge">
                         <h3>Weekly Challenge</h3>
-                        <p class="muted" style="margin:6px 0 10px">Donate to 3 different NGOs this week to earn a badge.</p>
-                        <div class="progress"><div id="challengeProgressBar" style="width:0%"></div></div>
+                        <p class="muted" style="margin:6px 0 10px">Donate to 3 different NGOs this week to earn a badge.
+                        </p>
+                        <div class="progress">
+                            <div id="challengeProgressBar" style="width:0%"></div>
+                        </div>
                         <p id="challengeProgressText" class="muted" style="margin-top:8px">0 / 3 donations completed</p>
                     </div>
                 </div>
@@ -660,7 +522,8 @@
                             <button class="close-btn" onclick="closeLeagueInfo()">Close</button>
                         </div>
                         <div>
-                            <p>Earn points by donating: each donation gives <strong>10 points</strong>. Your total points determine your league:</p>
+                            <p>Earn points by donating: each donation gives <strong>10 points</strong>. Your total
+                                points determine your league:</p>
                             <ul style="margin-left:18px;margin-top:8px">
                                 <li><span class="league-badge league-bronze">Bronze</span> 0–149 pts</li>
                                 <li><span class="league-badge league-silver">Silver</span> 150–299 pts</li>
@@ -671,8 +534,10 @@
                                 <li><span class="league-badge league-titan">Titan</span> 1500–1999 pts</li>
                                 <li><span class="league-badge league-legend">Legend</span> 2000+ pts</li>
                             </ul>
-                            <p style="margin-top:10px">The weekly challenge tracks <strong>unique NGOs</strong> you donate to this week. Donate to 3 different NGOs to complete the challenge.</p>
-                            <p class="muted">Notes: Points and weekly progress are stored locally on your device for this demo.</p>
+                            <p style="margin-top:10px">The weekly challenge tracks <strong>unique NGOs</strong> you
+                                donate to this week. Donate to 3 different NGOs to complete the challenge.</p>
+                            <p class="muted">Notes: Points and weekly progress are stored locally on your device for
+                                this demo.</p>
                         </div>
                     </div>
                 </div>
@@ -685,612 +550,94 @@
                         <h3>NGO News & Updates</h3>
                         <i class="fas fa-newspaper"></i>
                     </div>
-                    <div class="news-item"><div class="news-content"><h4>Global Fund announces new grants for environmental projects</h4><p>Top story • 2,843 readers</p></div></div>
-                    <div class="news-item"><div class="news-content"><h4>How NGOs are adapting to digital transformation</h4><p>Trending in Technology • 1,592 readers</p></div></div>
-                    <div class="news-item"><div class="news-content"><h4>New regulations for international nonprofit operations</h4><p>Policy • 932 readers</p></div></div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Global Fund announces new grants for environmental projects</h4>
+                            <p>Top story • 2,843 readers</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>How NGOs are adapting to digital transformation</h4>
+                            <p>Trending in Technology • 1,592 readers</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>New regulations for international nonprofit operations</h4>
+                            <p>Policy • 932 readers</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="widget">
-                    <div class="widget-header"><h3>Upcoming NGO Events</h3><i class="fas fa-calendar"></i></div>
-                    <div class="event-item"><div class="event-date">Jun 15</div><h4>NGO Leadership Summit</h4><p>Virtual Event • 10:00 AM</p></div>
-                    <div class="event-item"><div class="event-date">Jun 22</div><h4>Fundraising Strategies Workshop</h4><p>San Francisco • 2:00 PM</p></div>
-                    <div class="event-item"><div class="event-date">Jul 5</div><h4>Global Health Conference</h4><p>New York • 9:00 AM</p></div>
+                    <div class="widget-header">
+                        <h3>Upcoming NGO Events</h3><i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jun 15</div>
+                        <h4>NGO Leadership Summit</h4>
+                        <p>Virtual Event • 10:00 AM</p>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jun 22</div>
+                        <h4>Fundraising Strategies Workshop</h4>
+                        <p>San Francisco • 2:00 PM</p>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jul 5</div>
+                        <h4>Global Health Conference</h4>
+                        <p>New York • 9:00 AM</p>
+                    </div>
                 </div>
 
                 <div class="widget">
-                    <div class="widget-header"><h3>Suggested NGOs to Follow</h3><i class="fas fa-users"></i></div>
-                    <div class="news-item"><div class="news-content"><h4>HealthFirst Worldwide</h4><p>125 mutual connections</p></div></div>
-                    <div class="news-item"><div class="news-content"><h4>Future Forests</h4><p>87 mutual connections</p></div></div>
-                    <div class="news-item"><div class="news-content"><h4>Education Without Borders</h4><p>64 mutual connections</p></div></div>
+                    <div class="widget-header">
+                        <h3>Suggested NGOs to Follow</h3><i class="fas fa-users"></i>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>HealthFirst Worldwide</h4>
+                            <p>125 mutual connections</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Future Forests</h4>
+                            <p>87 mutual connections</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Education Without Borders</h4>
+                            <p>64 mutual connections</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="widget">
-                    <div class="widget-header"><h3>Resources & Tools</h3><i class="fas fa-toolbox"></i></div>
-                    <div class="event-item"><h4>Grant Writing Guide</h4><p>Download our free guide</p></div>
-                    <div class="event-item"><h4>Volunteer Management</h4><p>Best practices webinar</p></div>
-                    <div class="event-item"><h4>Impact Measurement</h4><p>Tools and templates</p></div>
+                    <div class="widget-header">
+                        <h3>Resources & Tools</h3><i class="fas fa-toolbox"></i>
+                    </div>
+                    <div class="event-item">
+                        <h4>Grant Writing Guide</h4>
+                        <p>Download our free guide</p>
+                    </div>
+                    <div class="event-item">
+                        <h4>Volunteer Management</h4>
+                        <p>Best practices webinar</p>
+                    </div>
+                    <div class="event-item">
+                        <h4>Impact Measurement</h4>
+                        <p>Tools and templates</p>
+                    </div>
                 </div>
             </aside>
         </div>
     </div>
 
-    <script>
-        /* ---------- sample NGO data (replace with API later) ---------- */
-        const ngos = [
-            {
-                id: 'education',
-                name: 'Education for All',
-                category: 'education',
-                location: 'Rural India',
-                impact: 42000,
-                desc: 'Providing free & quality education to rural children via mobile classrooms and teacher training.',
-                tags: ['#Education', '#RemoteLearning', '#VolunteersNeeded'],
-                contact: 'contact@educationforall.org',
-                website: 'https://educationforall.example',
-                banner: '', // optional banner URL
-                logoIcon: 'fa-book',
-                followed: false
-            },
-            {
-                id: 'health',
-                name: 'HealthFirst',
-                category: 'health',
-                location: 'Multiple States',
-                impact: 81000,
-                desc: 'Affordable primary healthcare, mobile clinics and maternal health programs for underserved families.',
-                tags: ['#Health', '#MaternalCare'],
-                contact: 'support@healthfirst.org',
-                website: 'https://healthfirst.example',
-                banner: '',
-                logoIcon: 'fa-heartbeat',
-                followed: false
-            },
-            {
-                id: 'environment',
-                name: 'Future Forests',
-                category: 'environment',
-                location: 'Global',
-                impact: 120000,
-                desc: 'Reforestation campaigns, community tree-planting and climate education programs.',
-                tags: ['#Reforestation', '#ClimateAction'],
-                contact: 'hello@futureforests.org',
-                website: 'https://futureforests.example',
-                banner: '',
-                logoIcon: 'fa-tree',
-                followed: false
-            },
-            {
-                id: 'women',
-                name: 'WomenRise',
-                category: 'women',
-                location: 'Urban & Rural',
-                impact: 23000,
-                desc: 'Women empowerment through skill-building, legal aid & microfinance support.',
-                tags: ['#WomenEmpowerment', '#Microfinance'],
-                contact: 'info@womenrise.org',
-                website: 'https://womenrise.example',
-                banner: '',
-                logoIcon: 'fa-female',
-                followed: false
-            },
-            {
-                id: 'poverty',
-                name: 'LiftUp',
-                category: 'poverty',
-                location: 'Regional',
-                impact: 54000,
-                desc: 'Economic uplift programs, vocational training and food-security initiatives.',
-                tags: ['#PovertyAlleviation', '#Livelihoods'],
-                contact: 'hello@liftup.org',
-                website: 'https://liftup.example',
-                banner: '',
-                logoIcon: 'fa-hands-helping',
-                followed: false
-            }
-        ];
-
-        // Variables to store current filter state
-        let currentCategory = 'all';
-        let currentSort = 'relevance';
-        let currentSearchQuery = '';
-
-        // Current page state
-        let currentPage = 'home';
-
-        /* ---------- login ---------- */
-        function login(){
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if(email && password){
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                showPage('home');
-            } else {
-                alert('Please enter both email and password');
-            }
-        }
-
-        /* ---------- page navigation ---------- */
-        function showPage(page) {
-            // Hide all pages
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'none';
-            document.getElementById('network-page').style.display = 'none';
-            const myNgosPageEl = document.getElementById('my-ngos-page');
-            if (myNgosPageEl) myNgosPageEl.style.display = 'none';
-            document.getElementById('collaborate-page').style.display = 'none';
-            document.getElementById('alerts-page').style.display = 'none';
-            const competitionsPageEl = document.getElementById('competitions-page');
-            if (competitionsPageEl) competitionsPageEl.style.display = 'none';
-            
-            // Show selected page
-            document.getElementById(`${page}-page`).style.display = 'block';
-            
-            // Update navigation active state
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => item.classList.remove('active'));
-            
-            // Find and activate the clicked nav item
-            const navItem = Array.from(navItems).find(item => 
-                item.textContent.includes(page.charAt(0).toUpperCase() + page.slice(1)) || 
-                (page === 'home' && item.querySelector('.fa-home'))
-            );
-            
-            if (navItem) {
-                navItem.classList.add('active');
-            }
-            
-            // If showing home or my-ngos page, render respective lists
-            if (page === 'home') {
-                renderNGOList();
-            } else if (page === 'my-ngos') {
-                renderFollowedNGOs();
-            } else if (page === 'competitions') {
-                renderLeaderboard();
-                renderChallenge();
-            }
-            
-            currentPage = page;
-        }
-
-        /* ---------- profile tab switching ---------- */
-        function switchProfileTab(tab) {
-            // Hide all tabs
-            document.getElementById('about-tab').style.display = 'none';
-            document.getElementById('activity-tab').style.display = 'none';
-            document.getElementById('connections-tab').style.display = 'none';
-            document.getElementById('projects-tab').style.display = 'none';
-            
-            // Show selected tab
-            document.getElementById(`${tab}-tab`).style.display = 'block';
-            
-            // Update tab active state
-            const tabs = document.querySelectorAll('.profile-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Find and activate the clicked tab
-            const activeTab = Array.from(tabs).find(t => 
-                t.textContent.toLowerCase().includes(tab)
-            );
-            
-            if (activeTab) {
-                activeTab.classList.add('active');
-            }
-        }
-
-        /* ---------- tag search (clickable tags) ---------- */
-        function tagSearch(e, tag){
-            e.stopPropagation();
-            const input = document.getElementById('globalSearch');
-            input.value = tag;
-            currentSearchQuery = tag;
-            applyFilters();
-        }
-
-        /* ---------- apply filters function ---------- */
-        function applyFilters() {
-            // Get current filter values
-            currentCategory = document.getElementById('categoryFilter').value;
-            currentSort = document.getElementById('sortSelect').value;
-            currentSearchQuery = document.getElementById('globalSearch').value.toLowerCase().trim();
-            
-            // Render the NGO list with the current filters
-            renderNGOList();
-        }
-
-        /* ---------- rendering list ---------- */
-        function renderNGOList(){
-            // show explore view
-            showExplore(false);
-
-            const grid = document.getElementById('ngoGrid');
-            grid.innerHTML = '';
-
-            let filtered = ngos.filter(n=>{
-                const matchesCategory = (currentCategory === 'all') || (n.category === currentCategory);
-                const tagsJoined = (n.tags || []).join(' ').toLowerCase();
-                const matchesQuery = !currentSearchQuery || (
-                    n.name.toLowerCase().includes(currentSearchQuery) ||
-                    n.desc.toLowerCase().includes(currentSearchQuery) ||
-                    tagsJoined.includes(currentSearchQuery)
-                );
-                return matchesCategory && matchesQuery;
-            });
-
-            // simple sorts
-            if(currentSort === 'impact'){
-                filtered.sort((a,b)=>b.impact - a.impact);
-            } else if(currentSort === 'new'){
-                filtered = filtered.slice().reverse(); // placeholder for newest (if we had timestamps)
-            }
-
-            if(filtered.length === 0){
-                grid.innerHTML = '<p class="muted">No NGOs found. Try another filter or search term.</p>';
-                return;
-            }
-
-            filtered.forEach(n=>{
-                const card = document.createElement('div');
-                card.className = 'ngo-card';
-                // Build tags with clickable onclick to filter by tag
-                const tagsHtml = (n.tags || []).map(t=>{
-                    // escape single quotes in tag for safe inline handler
-                    const safe = t.replace(/'/g, "\\'");
-                    return `<span class="ngo-tag" onclick="tagSearch(event,'${safe}')">${t}</span>`;
-                }).join('');
-                card.innerHTML = `
-                    <div style="display:flex;gap:12px;align-items:center">
-                        <div class="ngo-icon"><i class="fa ${n.logoIcon}"></i></div>
-                        <div style="flex:1">
-                            <h3>${n.name}</h3>
-                            <div class="muted">${n.location} • ${n.category}</div>
-                        </div>
-                    </div>
-                    <p style="margin-top:12px">${n.desc.length>120 ? n.desc.slice(0,120)+'…' : n.desc}</p>
-                    <div class="ngo-tags">${tagsHtml}</div>
-                    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                        <button class="btn" onclick="showProfile('${n.id}')">View Profile</button>
-                        <button class="btn" onclick="donate('${n.id}')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
-                        <button class="follow-btn ${n.followed ? 'followed' : ''}" onclick="followNGO(event,this,'${n.id}')">
-                            ${n.followed ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed` : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`}
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        /* ---------- follow/unfollow toggle ----------
-           - toggles the `followed` property on the NGO object
-           - updates either the grid or the profile view depending on which is visible
-        */
-        function followNGO(e, btn, id){
-            e.stopPropagation();
-            const ngo = ngos.find(x=>x.id === id);
-            if(!ngo) return;
-
-            // toggle state
-            ngo.followed = !ngo.followed;
-
-            // If profile view is currently visible for this NGO, refresh it.
-            // Otherwise refresh the NGO grid/list.
-            const profileVisible = document.getElementById('ngoProfileView').style.display === 'block';
-            if(profileVisible){
-                // re-render profile for this NGO (keeps user on profile page)
-                showProfile(id);
-            } else {
-                if (currentPage === 'home') {
-                    renderNGOList();
-                } else if (currentPage === 'my-ngos') {
-                    renderFollowedNGOs();
-                }
-            }
-        }
-
-        /* ---------- show profile ---------- */
-        function showProfile(id){
-            const n = ngos.find(x=>x.id === id);
-            if(!n) return alert('NGO not found');
-
-            // hide grid, show profile view
-            document.getElementById('ngoGrid').style.display = 'none';
-            const profileView = document.getElementById('ngoProfileView');
-            profileView.style.display = 'block';
-
-            // populate profile content
-            const content = document.getElementById('ngoProfileContent');
-
-            const tagsHtml = (n.tags || []).map(t=>{
-                const safe = t.replace(/'/g, "\\'");
-                return `<span class="ngo-tag" onclick="tagSearch(event,'${safe}')">${t}</span>`;
-            }).join('');
-
-            content.innerHTML = `
-                <div class="ngo-banner">${n.banner ? `<img src="${n.banner}" style="width:100%;height:100%;object-fit:cover;border-radius:6px">` : `<div style="font-size:18px;color:var(--primary)">${n.name}</div>`}</div>
-                <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
-                    <div style="min-width:120px">
-                        <div class="ngo-icon" style="width:120px;height:120px;border-radius:12px;font-size:40px"><i class="fa ${n.logoIcon}"></i></div>
-                    </div>
-                    <div style="flex:1">
-                        <h2 style="margin:0">${n.name}</h2>
-                        <div class="meta-row">
-                            <div><i class="fas fa-map-marker-alt" style="margin-right:8px"></i>${n.location}</div>
-                            <div>•</div>
-                            <div><strong>Impact:</strong> ${n.impact.toLocaleString()}</div>
-                            <div>•</div>
-                            <div class="muted">${n.category}</div>
-                        </div>
-                        <p style="margin-top:12px">${n.desc}</p>
-
-                        <div class="ngo-tags" style="margin-top:6px">${tagsHtml}</div>
-
-                        <div class="ngo-actions" style="margin-top:12px">
-                            <button class="btn" onclick="donate('${n.id}')"><i class="fas fa-donate" style="margin-right:8px"></i>Donate</button>
-                            <button class="btn btn-secondary" onclick="join('${n.id}')"><i class="fas fa-handshake" style="margin-right:8px"></i>Join / Volunteer</button>
-                            <button class="btn btn-secondary" onclick="share('${n.id}')"><i class="fas fa-share" style="margin-right:8px"></i>Share</button>
-                            <a class="btn btn-secondary" href="${n.website}" target="_blank" rel="noopener">Visit Website</a>
-
-                            <!-- follow button on profile uses same handler -->
-                            <button style="margin-left:10px" class="follow-btn ${n.followed ? 'followed' : ''}" onclick="followNGO(event,this,'${n.id}')">
-                                ${n.followed ? `<i class="fas fa-check" style="margin-right:8px"></i>Followed` : `<i class="fas fa-plus" style="margin-right:8px"></i>Follow`}
-                            </button>
-                        </div>
-
-                        <div style="margin-top:12px">
-                            <strong>Contact:</strong> <a href="mailto:${n.contact}">${n.contact}</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-top:18px">
-                    <h4>Recent updates</h4>
-                    <div class="post" style="margin-top:8px;padding:12px">
-                        <div style="display:flex;align-items:center;gap:10px">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" alt="" style="width:48px;height:48px;border-radius:8px;object-fit:cover">
-                            <div>
-                                <strong>${n.name}</strong>
-                                <div class="muted" style="font-size:13px">2h ago</div>
-                            </div>
-                        </div>
-                        <p style="margin-top:10px">${n.name} — sample update about recent project highlights. (Replace with real content from API)</p>
-                    </div>
-                </div>
-            `;
-            // scroll to profile
-            content.scrollIntoView({behavior:'smooth'});
-        }
-
-        function showExplore(scroll=true){
-            document.getElementById('ngoGrid').style.display = 'grid';
-            document.getElementById('ngoProfileView').style.display = 'none';
-            if(scroll) document.getElementById('ngoGrid').scrollIntoView({behavior:'smooth'});
-        }
-
-        /* ---------- small actions ---------- */
-        function donate(id){
-            // Award 10 points per donation
-            const user = getCurrentUser();
-            const current = getPoints(user);
-            setPoints(user, current + 10);
-            incrementWeeklyDonationCount(user, id);
-            showToast('Thank you!', 'You earned 10 points for donating to ' + id, 'success');
-            // Update competitions displays if visible
-            if (currentPage === 'competitions'){
-                renderLeaderboard();
-                renderChallenge();
-            }
-        }
-        function join(id){ alert('Open join/volunteer flow for ' + id); }
-        function share(id){ navigator.share ? navigator.share({title:'Check this NGO',text:'Take a look at '+id,url:location.href}) : alert('Share this NGO: ' + id); }
-
-        // simple connect action for Network page
-        function connectWith(name){
-            showToast('Connection Request', 'Connection request sent to ' + name, 'success');
-        }
-
-        // ---------- My NGOs (Followed) ----------
-        function renderFollowedNGOs(){
-            const grid = document.getElementById('myNgosGrid');
-            if(!grid) return;
-            grid.innerHTML = '';
-            const followed = ngos.filter(n=>n.followed);
-            if(followed.length === 0){
-                grid.innerHTML = '<p class="muted">You have not followed any NGOs yet. Explore and follow to see them here.</p>';
-                return;
-            }
-            followed.forEach(n=>{
-                const card = document.createElement('div');
-                card.className = 'ngo-card';
-                const tagsHtml = (n.tags || []).map(t=>{
-                    const safe = t.replace(/'/g, "\\'");
-                    return `<span class="ngo-tag" onclick="tagSearch(event,'${safe}')">${t}</span>`;
-                }).join('');
-                card.innerHTML = `
-                    <div style="display:flex;gap:12px;align-items:center">
-                        <div class="ngo-icon"><i class="fa ${n.logoIcon}"></i></div>
-                        <div style="flex:1">
-                            <h3>${n.name}</h3>
-                            <div class="muted">${n.location} • ${n.category}</div>
-                        </div>
-                    </div>
-                    <p style="margin-top:12px">${n.desc.length>120 ? n.desc.slice(0,120)+'…' : n.desc}</p>
-                    <div class="ngo-tags">${tagsHtml}</div>
-                    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                        <button class="btn" onclick="showProfile('${n.id}')">View Profile</button>
-                        <button class="btn" onclick="donate('${n.id}')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
-                        <button class="follow-btn ${n.followed ? 'followed' : ''}" onclick="followNGO(event,this,'${n.id}')">
-                            ${n.followed ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed` : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`}
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // ---------- Leaderboard & Weekly Challenge (localStorage) ----------
-        const LS_POINTS_KEY = 'connectngo_points_v1';
-        const LS_WEEKLY_KEY = 'connectngo_weekly_v1';
-        function getCurrentUser(){ return 'You'; }
-        function getPoints(user){
-            const map = JSON.parse(localStorage.getItem(LS_POINTS_KEY) || '{}');
-            return map[user] || 0;
-        }
-        function setPoints(user, points){
-            const map = JSON.parse(localStorage.getItem(LS_POINTS_KEY) || '{}');
-            map[user] = points;
-            localStorage.setItem(LS_POINTS_KEY, JSON.stringify(map));
-        }
-        function getAllPoints(){
-            const map = JSON.parse(localStorage.getItem(LS_POINTS_KEY) || '{}');
-            return map;
-        }
-        function getWeekId(){
-            const d = new Date();
-            const year = d.getUTCFullYear();
-            const firstJan = new Date(Date.UTC(year,0,1));
-            const days = Math.floor((d - firstJan) / 86400000) + firstJan.getUTCDay();
-            const week = Math.floor(days/7);
-            return `${year}-w${week}`;
-        }
-        function getWeeklyData(){
-            const data = JSON.parse(localStorage.getItem(LS_WEEKLY_KEY) || '{}');
-            const currentWeek = getWeekId();
-            if (data.weekId !== currentWeek){
-                return { weekId: currentWeek, donationsByUser: {}, donationTargetsByUser: {} };
-            }
-            return data;
-        }
-        function saveWeeklyData(data){ localStorage.setItem(LS_WEEKLY_KEY, JSON.stringify(data)); }
-        function incrementWeeklyDonationCount(user, ngoId){
-            const data = getWeeklyData();
-            if(!data.donationsByUser[user]) data.donationsByUser[user] = 0;
-            data.donationsByUser[user] += 1;
-            if(!data.donationTargetsByUser[user]) data.donationTargetsByUser[user] = {};
-            data.donationTargetsByUser[user][ngoId] = true; // count unique NGOs via key set
-            saveWeeklyData(data);
-        }
-        function getUniqueDonationCount(user){
-            const data = getWeeklyData();
-            const targets = data.donationTargetsByUser[user] || {};
-            return Object.keys(targets).length;
-        }
-        function seedDemoPoints(map){
-            const demo = { 'Priya': 70, 'Sarah': 60, 'Michael': 50, 'Emily': 30, 'Aisha': 25, 'David': 20, 'John': 15 };
-            Object.entries(demo).forEach(([name, pts])=>{ if(map[name] == null) map[name] = pts; });
-            if(map['You'] == null) map['You'] = 0;
-            localStorage.setItem(LS_POINTS_KEY, JSON.stringify(map));
-        }
-        function getLeague(pts){
-            // Simple Clash of Clans-inspired tiers
-            if(pts >= 2000) return {name:'Legend', cls:'league-legend', nextAt: Infinity};
-            if(pts >= 1500) return {name:'Titan', cls:'league-titan', nextAt: 2000};
-            if(pts >= 1200) return {name:'Champion', cls:'league-champion', nextAt: 1500};
-            if(pts >= 800) return {name:'Master', cls:'league-master', nextAt: 1200};
-            if(pts >= 500) return {name:'Crystal', cls:'league-crystal', nextAt: 800};
-            if(pts >= 300) return {name:'Gold', cls:'league-gold', nextAt: 500};
-            if(pts >= 150) return {name:'Silver', cls:'league-silver', nextAt: 300};
-            return {name:'Bronze', cls:'league-bronze', nextAt: 150};
-        }
-        function renderLeaderboard(){
-            const el = document.getElementById('leaderboardBody');
-            if(!el) return;
-            const map = getAllPoints();
-            seedDemoPoints(map);
-            const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10);
-            el.innerHTML = '';
-            sorted.forEach(([name, pts], idx)=>{
-                const row = document.createElement('div');
-                row.className = 'lb-row';
-                const league = getLeague(pts);
-                row.innerHTML = `
-                    <div class="lb-user">
-                        <div class="lb-rank">${idx+1}</div>
-                        <strong>${name}</strong>
-                        <span class="league-badge ${league.cls}" style="margin-left:8px">${league.name}</span>
-                    </div>
-                    <div class="lb-points">${pts} pts</div>
-                `;
-                el.appendChild(row);
-            });
-            // Update your league card
-            const youPts = getPoints(getCurrentUser());
-            const info = getLeague(youPts);
-            const badge = document.getElementById('yourLeagueBadge');
-            const ptsEl = document.getElementById('yourLeaguePoints');
-            const progBar = document.getElementById('leagueProgressBar');
-            const progText = document.getElementById('leagueProgressText');
-            if(badge){
-                badge.className = `league-badge ${info.cls}`;
-                badge.textContent = info.name;
-            }
-            if(ptsEl){ ptsEl.textContent = `${youPts} pts`; }
-            if(progBar && progText){
-                const nextAt = info.nextAt;
-                if(nextAt === Infinity){
-                    progBar.style.width = '100%';
-                    progText.textContent = 'Max league reached';
-                } else {
-                    const fromAt = getLeague(Math.max(0, youPts-1)).nextAt === info.nextAt ? 0 : getLeagueThresholdStart(info.name);
-                    const start = getLeagueThresholdStart(info.name);
-                    const pct = Math.max(0, Math.min(100, Math.round(((youPts - start)/(nextAt - start))*100)));
-                    progBar.style.width = pct + '%';
-                    progText.textContent = `${Math.max(0,youPts-start)} / ${nextAt-start} to next league`;
-                }
-            }
-        }
-        function getLeagueThresholdStart(name){
-            switch(name){
-                case 'Bronze': return 0;
-                case 'Silver': return 150;
-                case 'Gold': return 300;
-                case 'Crystal': return 500;
-                case 'Master': return 800;
-                case 'Champion': return 1200;
-                case 'Titan': return 1500;
-                case 'Legend': return 2000;
-                default: return 0;
-            }
-        }
-        function renderChallenge(){
-            const done = getUniqueDonationCount(getCurrentUser());
-            const total = 3;
-            const pct = Math.min(100, Math.round((done/total)*100));
-            const bar = document.getElementById('challengeProgressBar');
-            const text = document.getElementById('challengeProgressText');
-            if(bar) bar.style.width = pct + '%';
-            if(text) text.textContent = `${done} / ${total} donations completed`;
-        }
-
-        // ---------- League Info Modal ----------
-        function openLeagueInfo(){
-            const m = document.getElementById('leagueInfoModal');
-            if(m) m.style.display = 'flex';
-        }
-        function closeLeagueInfo(e){
-            if(e && e.stopPropagation) e.stopPropagation();
-            const m = document.getElementById('leagueInfoModal');
-            if(m) m.style.display = 'none';
-        }
-
-        // ---------- Toasts ----------
-        function showToast(title, message, type='info', timeoutMs=3000){
-            let container = document.getElementById('toast-container');
-            if(!container){
-                container = document.createElement('div');
-                container.id = 'toast-container';
-                document.body.appendChild(container);
-            }
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<div class="title">${title}</div><div>${message}</div>`;
-            container.appendChild(toast);
-            setTimeout(()=>{
-                toast.style.animation = 'fadeOut .2s forwards';
-                setTimeout(()=>container.removeChild(toast), 180);
-            }, timeoutMs);
-        }
-
-        // initial: nothing until login
+    <script src="script.js">
     </script>
 </body>
+
 </html>
