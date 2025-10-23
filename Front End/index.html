@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ConnectNGO - NGO Networking Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===== SignUp ===== -->
+    <div class="hidden" id="signup-page" >
+        <div class="login-card">
+            <div class="logo">
+                <h1>Connect<span>NGO</span></h1>
+                <p>Empowering NGOs through collaboration</p>
+            </div>
+            <form>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email1" placeholder="Enter your email" name="email">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password1" placeholder="Enter your password" name="password">
+                </div>
+                <button class="btn btn-primary" onclick="Signup(event)">Sign Up</button>
+            </form>
+            <div class="login-footer">
+                <p>Already have an account? <a style="cursor: pointer;" onclick="showlogin()">Login from here</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- ===== Login ===== -->
+    <div id="login-page">
+        <div class="login-card">
+            <div class="logo">
+                <h1>Connect<span>NGO</span></h1>
+                <p>Empowering NGOs through collaboration</p>
+            </div>
+            <form>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" name="email">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" name="password">
+                </div>
+                <button class="btn btn-primary" onclick="login(event)">Sign In</button>
+            </form>
+            <div class="login-footer">
+                <p>Don't have an account? <a style="cursor: pointer;" onclick="showsignup()">Register Yourself</a></p>
+                <p><a href="/login">Forgot password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container nav-content">
+                <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
+                    <i class="fas fa-globe" style="color:var(--primary);font-size:26px"></i>
+                    <h2>ConnectNGO</h2>
+                </div>
+
+                <div class="nav-search">
+                    <div class="search-box">
+                        <i class="fas fa-search" style="color:var(--gray);margin-right:8px"></i>
+                        <input id="globalSearch" type="text" placeholder="Search for NGOs, opportunities, events...">
+                    </div>
+                </div>
+
+                <div class="nav-menu">
+                    <div class="nav-item active" onclick="showPage('home')">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="nav-item" onclick="showPage('network')">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Network</span>
+                    </div>
+                    <div class="nav-item" onclick="showPage('collaborate')">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Collaborate</span>
+                    </div>
+                    <div class="nav-item" onclick="showPage('alerts')">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                    </div>
+                    <div class="nav-item" onclick="showPage('profile')">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                    <div class="nav-item" onclick="showPage('competitions')">
+                        <i class="fas fa-trophy"></i>
+                        <span>Competitions</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="container main-content">
+            <!-- LEFT SIDEBAR -->
+            <aside class="left-sidebar">
+                <div class="profile-card">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
+                        alt="Profile" class="profile-img">
+                    <h3 id="userName">Azam</h3>
+                    <p id="userRole">Director at GreenEarth Initiative</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <div class="stat-value">342</div>
+                            <div class="stat-label">Connections</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-counter">
+                    <h3>Your Impact</h3>
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <div class="impact-value">5.2K</div>
+                            <div class="impact-label">Lives Impacted</div>
+                        </div>
+                        <div class="impact-stat">
+                            <div class="impact-value">128</div>
+                            <div class="impact-label">Partners</div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="sidebar-links">
+                    <li class="active" onclick="showPage('profile')"><i class="fas fa-user"></i> My Profile</li>
+                    <li onclick="showPage('my-ngos')"><i class="fas fa-users"></i> My NGOs</li>
+                    <li onclick="showPage('events')"><i class="fas fa-calendar"></i> Events</li>
+                    <li onclick="showPage('volunteers')"><i class="fas fa-hand-holding-heart"></i> Volunteers</li>
+                    <li onclick="showPage('donations')"><i class="fas fa-donate"></i> Donations</li>
+                    <li onclick="showPage('analytics')"><i class="fas fa-chart-line"></i> Impact Analytics</li>
+                    <li onclick="showPage('saved')"><i class="fas fa-bookmark"></i> Saved Items</li>
+                </ul>
+            </aside>
+
+            <!-- FEED / MAIN CONTENT AREA -->
+            <main class="feed" id="feedArea">
+                <!-- HOME/EXPLORE PAGE (default view) -->
+                <div id="home-page">
+                    <!-- Explore top controls -->
+                    <div class="explore-top">
+                        <div>
+                            <h2 style="margin-bottom:6px">Explore NGOs</h2>
+                            <p class="muted">Find organizations by cause, location or interests — click a card to view
+                                full profile.</p>
+                        </div>
+                        <div class="filters">
+                            <select id="categoryFilter" class="filter-select">
+                                <option value="all">All categories</option>
+                                <option value="education">Education</option>
+                                <option value="health">Health</option>
+                                <option value="environment">Environment</option>
+                                <option value="women">Women Empowerment</option>
+                                <option value="poverty">Poverty Alleviation</option>
+                            </select>
+                            <select id="sortSelect" class="filter-select">
+                                <option value="relevance">Sort: Relevance</option>
+                                <option value="impact">Sort: Impact</option>
+                                <option value="new">Sort: Newest</option>
+                            </select>
+                            <button class="btn" onclick="applyFilters()">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- NGO GRID (rendered dynamically) -->
+                    <div id="ngoGrid" class="ngo-grid" aria-live="polite"></div>
+
+                    <!-- NGO Profile view (hidden by default) -->
+                    <div id="ngoProfileView" style="display:none;margin-top:18px">
+                        <div class="ngo-profile" id="ngoProfileContent"></div>
+                        <div style="text-align:center;margin-top:14px">
+                            <button class="btn btn-secondary" onclick="showExplore()">← Back to Explore</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFILE PAGE -->
+                <div id="profile-page" class="profile-page">
+                    <div class="profile-header">
+                        <div class="profile-banner"></div>
+                        <div class="profile-avatar">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
+                                alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover">
+                        </div>
+                        <div class="profile-info">
+                            <h2>Sarah Johnson</h2>
+                            <p>Director at GreenEarth Initiative</p>
+                            <p class="muted">New York, USA | Environmental Conservation & Sustainability</p>
+                            <div class="profile-stats"
+                                style="justify-content:flex-start;gap:30px;border:none;padding:10px 0">
+                                <div class="stat">
+                                    <div class="stat-value">342</div>
+                                    <div class="stat-label">Connections</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">28</div>
+                                    <div class="stat-label">Projects</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">5.2K</div>
+                                    <div class="stat-label">Lives Impacted</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-tabs">
+                        <div class="profile-tab active" onclick="switchProfileTab('about')">About</div>
+                        <div class="profile-tab" onclick="switchProfileTab('activity')">Activity</div>
+                        <div class="profile-tab" onclick="switchProfileTab('connections')">Connections</div>
+                        <div class="profile-tab" onclick="switchProfileTab('projects')">Projects</div>
+                    </div>
+
+                    <div class="profile-content">
+                        <div id="about-tab">
+                            <div class="profile-section">
+                                <h3>About</h3>
+                                <p>Passionate environmentalist with over 10 years of experience in sustainable
+                                    development and conservation projects. Director at GreenEarth Initiative, leading a
+                                    team of 25 professionals working across 5 countries to promote environmental
+                                    sustainability and community resilience.</p>
+                            </div>
+
+                            <div class="profile-section">
+                                <h3>Experience</h3>
+                                <div class="profile-card-small">
+                                    <h4>Director, GreenEarth Initiative</h4>
+                                    <p class="muted">2018 - Present · 5 yrs 3 mos</p>
+                                    <p>Leading strategic planning, fundraising, and implementation of conservation
+                                        projects across multiple regions.</p>
+                                </div>
+                                <div class="profile-card-small" style="margin-top:15px">
+                                    <h4>Project Manager, World Conservation Society</h4>
+                                    <p class="muted">2014 - 2018 · 4 yrs</p>
+                                    <p>Managed community-based conservation initiatives in Southeast Asia, focusing on
+                                        rainforest preservation.</p>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h3>Education</h3>
+                                <div class="profile-card-small">
+                                    <h4>Yale University</h4>
+                                    <p class="muted">Master of Environmental Management</p>
+                                    <p>2012 - 2014</p>
+                                </div>
+                                <div class="profile-card-small" style="margin-top:15px">
+                                    <h4>University of California, Berkeley</h4>
+                                    <p class="muted">Bachelor of Science in Environmental Science</p>
+                                    <p>2008 - 2012</p>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h3>Skills & Expertise</h3>
+                                <div class="profile-grid">
+                                    <div class="profile-card-small">
+                                        <h4>Sustainability Planning</h4>
+                                        <p class="muted">Project Management · Strategic Planning</p>
+                                    </div>
+                                    <div class="profile-card-small">
+                                        <h4>Community Development</h4>
+                                        <p class="muted">Stakeholder Engagement · Capacity Building</p>
+                                    </div>
+                                    <div class="profile-card-small">
+                                        <h4>Conservation</h4>
+                                        <p class="muted">Biodiversity · Habitat Restoration</p>
+                                    </div>
+                                    <div class="profile-card-small">
+                                        <h4>Fundraising</h4>
+                                        <p class="muted">Grant Writing · Donor Relations</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="activity-tab" style="display:none">
+                            <h3>Recent Activity</h3>
+                            <div class="alert-item">
+                                <div class="alert-icon"><i class="fas fa-plus"></i></div>
+                                <div>
+                                    <p><strong>You connected with HealthFirst Worldwide</strong></p>
+                                    <p class="muted">2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon"><i class="fas fa-calendar"></i></div>
+                                <div>
+                                    <p><strong>You registered for the NGO Leadership Summit on June 15</strong></p>
+                                    <p class="muted">Yesterday</p>
+                                </div>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                                <div>
+                                    <p><strong>You volunteered for the Coastal Cleanup project</strong></p>
+                                    <p class="muted">3 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="connections-tab" style="display:none">
+                            <h3>Your Connections</h3>
+                            <div class="connections-grid">
+                                <div class="connection-card">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
+                                    <h4>Michael Chen</h4>
+                                    <p class="muted">EcoSolutions</p>
+                                </div>
+                                <div class="connection-card">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
+                                    <h4>Priya Sharma</h4>
+                                    <p class="muted">HealthFirst Worldwide</p>
+                                </div>
+                                <div class="connection-card">
+                                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+                                        class="connection-img">
+                                    <h4>David Wilson</h4>
+                                    <p class="muted">Future Forests</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="projects-tab" style="display:none">
+                            <h3>Your Projects</h3>
+                            <div class="project-card">
+                                <div class="project-header">
+                                    <h4>Community Reforestation Program</h4>
+                                    <span class="stat-value">Ongoing</span>
+                                </div>
+                                <p>Planting 10,000 native trees in deforested areas with local community participation.
+                                </p>
+                                <p class="muted">12 partners · 342 volunteers · 65% complete</p>
+                            </div>
+                            <div class="project-card">
+                                <div class="project-header">
+                                    <h4>Clean Water Initiative</h4>
+                                    <span class="stat-value">Completed</span>
+                                </div>
+                                <p>Providing clean drinking water solutions to 5 remote villages through well
+                                    installation and water purification systems.</p>
+                                <p class="muted">8 partners · 2,140 beneficiaries</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MY NGOS PAGE -->
+                <div id="my-ngos-page" style="display:none">
+                    <h2 class="page-title">My NGOs</h2>
+                    <p class="muted" style="margin-bottom:12px">NGOs you follow will appear here.</p>
+                    <div id="myNgosGrid" class="ngo-grid" aria-live="polite"></div>
+                </div>
+
+                <!-- NETWORK PAGE -->
+                <div id="network-page" class="network-page">
+                    <h2 class="page-title">Your Network</h2>
+                    <div class="connections-grid">
+                        <div class="connection-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
+                            <h4>Michael Chen</h4>
+                            <p class="muted">EcoSolutions</p>
+                            <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+                                <button class="btn" onclick="connectWith('Michael Chen')">Connect</button>
+                                <button class="btn">Message</button>
+                            </div>
+                        </div>
+                        <div class="connection-card">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
+                            <h4>Priya Sharma</h4>
+                            <p class="muted">HealthFirst Worldwide</p>
+                            <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+                                <button class="btn" onclick="connectWith('Priya Sharma')">Connect</button>
+                                <button class="btn">Message</button>
+                            </div>
+                        </div>
+                        <div class="connection-card">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
+                            <h4>David Wilson</h4>
+                            <p class="muted">Future Forests</p>
+                            <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+                                <button class="btn" onclick="connectWith('David Wilson')">Connect</button>
+                                <button class="btn">Message</button>
+                            </div>
+                        </div>
+                        <div class="connection-card">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+                                class="connection-img">
+                            <h4>Emily Rodriguez</h4>
+                            <p class="muted">Education for All</p>
+                            <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+                                <button class="btn" onclick="connectWith('Emily Rodriguez')">Connect</button>
+                                <button class="btn">Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLLABORATE PAGE -->
+                <div id="collaborate-page" class="collaborate-page">
+                    <h2 class="page-title">Collaboration Opportunities</h2>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h4>Community Reforestation Program</h4>
+                            <span class="stat-value">Seeking Partners</span>
+                        </div>
+                        <p>We're looking for NGOs with expertise in community engagement to join our reforestation
+                            initiative in Southeast Asia.</p>
+                        <p class="muted">Deadline: June 30, 2023 · 5 partners needed</p>
+                        <button class="btn" style="margin-top:10px">Express Interest</button>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h4>Digital Literacy for Rural Women</h4>
+                            <span class="stat-value">Volunteers Needed</span>
+                        </div>
+                        <p>Help us train 500 women in digital skills across rural communities. We need trainers and
+                            technical support.</p>
+                        <p class="muted">Starting: July 15, 2023 · 20 volunteers needed</p>
+                        <button class="btn" style="margin-top:10px">Join Project</button>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h4>Clean Water Initiative Expansion</h4>
+                            <span class="stat-value">Funding Partners</span>
+                        </div>
+                        <p>Seeking funding partners to expand our successful clean water program to 10 additional
+                            communities.</p>
+                        <p class="muted">Goal: $250,000 · 3 funding partners needed</p>
+                        <button class="btn" style="margin-top:10px">Learn More</button>
+                    </div>
+                </div>
+
+                <!-- ALERTS PAGE -->
+                <div id="alerts-page" class="alerts-page">
+                    <h2 class="page-title">Notifications</h2>
+
+                    <div class="alert-item">
+                        <div class="alert-icon"><i class="fas fa-handshake"></i></div>
+                        <div>
+                            <p><strong>HealthFirst Worldwide wants to connect with you</strong></p>
+                            <p class="muted">2 hours ago</p>
+                            <div style="display:flex;gap:10px;margin-top:10px">
+                                <button class="btn">Accept</button>
+                                <button class="btn btn-secondary">Ignore</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon"><i class="fas fa-calendar"></i></div>
+                        <div>
+                            <p><strong>Reminder: NGO Leadership Summit starts in 3 days</strong></p>
+                            <p class="muted">Yesterday</p>
+                            <button class="btn" style="margin-top:10px">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon"><i class="fas fa-donate"></i></div>
+                        <div>
+                            <p><strong>New grant opportunity: Environmental Conservation Fund</strong></p>
+                            <p class="muted">2 days ago</p>
+                            <button class="btn" style="margin-top:10px">Apply Now</button>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon"><i class="fas fa-users"></i></div>
+                        <div>
+                            <p><strong>5 new NGOs joined that match your interests</strong></p>
+                            <p class="muted">3 days ago</p>
+                            <button class="btn" style="margin-top:10px">View NGOs</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPETITIONS PAGE -->
+                <div id="competitions-page" style="display:none">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"
+                        class="page-title">
+                        <h2 style="margin:0">Weekly Donation Competition</h2>
+                        <button class="btn btn-secondary" onclick="openLeagueInfo()"><i class="fas fa-info-circle"
+                                style="margin-right:6px"></i>How Leagues Work</button>
+                    </div>
+                    <div id="yourLeagueCard" class="league-card">
+                        <div class="league-left">
+                            <div id="yourLeagueBadge" class="league-badge league-bronze">Bronze</div>
+                            <div>
+                                <div><strong>Your League</strong></div>
+                                <div id="yourLeaguePoints" class="muted">0 pts</div>
+                            </div>
+                        </div>
+                        <div style="min-width:220px">
+                            <div class="progress">
+                                <div id="leagueProgressBar" style="width:0%"></div>
+                            </div>
+                            <div id="leagueProgressText" class="muted" style="margin-top:6px;text-align:right">0 / 100
+                                to next league</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard" style="margin-bottom:16px">
+                        <h3>Leaderboard</h3>
+                        <div id="leaderboardBody"></div>
+                    </div>
+                    <div class="challenge">
+                        <h3>Weekly Challenge</h3>
+                        <p class="muted" style="margin:6px 0 10px">Donate to 3 different NGOs this week to earn a badge.
+                        </p>
+                        <div class="progress">
+                            <div id="challengeProgressBar" style="width:0%"></div>
+                        </div>
+                        <p id="challengeProgressText" class="muted" style="margin-top:8px">0 / 3 donations completed</p>
+                    </div>
+                </div>
+                <!-- League Info Modal -->
+                <div id="leagueInfoModal" class="modal-overlay" onclick="closeLeagueInfo(event)">
+                    <div class="modal-box" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <h3>Leagues & Progression</h3>
+                            <button class="close-btn" onclick="closeLeagueInfo()">Close</button>
+                        </div>
+                        <div>
+                            <p>Earn points by donating: each donation gives <strong>10 points</strong>. Your total
+                                points determine your league:</p>
+                            <ul style="margin-left:18px;margin-top:8px">
+                                <li><span class="league-badge league-bronze">Bronze</span> 0–149 pts</li>
+                                <li><span class="league-badge league-silver">Silver</span> 150–299 pts</li>
+                                <li><span class="league-badge league-gold">Gold</span> 300–499 pts</li>
+                                <li><span class="league-badge league-crystal">Crystal</span> 500–799 pts</li>
+                                <li><span class="league-badge league-master">Master</span> 800–1199 pts</li>
+                                <li><span class="league-badge league-champion">Champion</span> 1200–1499 pts</li>
+                                <li><span class="league-badge league-titan">Titan</span> 1500–1999 pts</li>
+                                <li><span class="league-badge league-legend">Legend</span> 2000+ pts</li>
+                            </ul>
+                            <p style="margin-top:10px">The weekly challenge tracks <strong>unique NGOs</strong> you
+                                donate to this week. Donate to 3 different NGOs to complete the challenge.</p>
+                            <p class="muted">Notes: Points and weekly progress are stored locally on your device for
+                                this demo.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT SIDEBAR -->
+            <aside class="right-sidebar">
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>NGO News & Updates</h3>
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Global Fund announces new grants for environmental projects</h4>
+                            <p>Top story • 2,843 readers</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>How NGOs are adapting to digital transformation</h4>
+                            <p>Trending in Technology • 1,592 readers</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>New regulations for international nonprofit operations</h4>
+                            <p>Policy • 932 readers</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Upcoming NGO Events</h3><i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jun 15</div>
+                        <h4>NGO Leadership Summit</h4>
+                        <p>Virtual Event • 10:00 AM</p>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jun 22</div>
+                        <h4>Fundraising Strategies Workshop</h4>
+                        <p>San Francisco • 2:00 PM</p>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jul 5</div>
+                        <h4>Global Health Conference</h4>
+                        <p>New York • 9:00 AM</p>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Suggested NGOs to Follow</h3><i class="fas fa-users"></i>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>HealthFirst Worldwide</h4>
+                            <p>125 mutual connections</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Future Forests</h4>
+                            <p>87 mutual connections</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-content">
+                            <h4>Education Without Borders</h4>
+                            <p>64 mutual connections</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Resources & Tools</h3><i class="fas fa-toolbox"></i>
+                    </div>
+                    <div class="event-item">
+                        <h4>Grant Writing Guide</h4>
+                        <p>Download our free guide</p>
+                    </div>
+                    <div class="event-item">
+                        <h4>Volunteer Management</h4>
+                        <p>Best practices webinar</p>
+                    </div>
+                    <div class="event-item">
+                        <h4>Impact Measurement</h4>
+                        <p>Tools and templates</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="script.js">
+    </script>
+</body>
+
+</html>
