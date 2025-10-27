@@ -85,20 +85,34 @@ async function Signup(event) {
   event.preventDefault();
   const email = document.getElementById("email1").value;
   const password = document.getElementById("password1").value;
+  if (!email || !password) {
+    showToast("Invalid Input", "Please Enter Both Credentials");
+  }
+  else {
 
-  const response = await fetch("/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password}),
-  });
+    const response = await fetch("/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (data.message === "Success") {
-    alert("You have been registered successfully and can log in now.");
-  } else {
-    alert("Not registered. Try again");
+    if (data.message === "Success") {
+      showToast("Registered Successfully", "You have been registered successfully and can log in now.", "success", 2000);
+
+      // Reload immediately after toast animation completes
+      setTimeout(() => {
+        location.reload();
+      }, 2000 + 200); // toast duration + fadeOut animation time
+    }
+    else if (data.message === "Already Exists") {
+      showToast("Existing Email Entered", "Email Already Exists.Try to Login.");
+    }
+    else {
+      showToast("Registration Unsuccessful", "Try Again");
+    }
   }
 }
 
@@ -127,9 +141,10 @@ async function login(event) {
   if (data.message === "Success") {
     document.getElementById("login-page").style.display = "none";
     document.getElementById("dashboard").style.display = "block";
+    localStorage.setItem("userId", data.userId);
     showPage("home");
   } else {
-    alert("Please create an account first.");
+    showToast("User Not Registered", "Please create an account first");
   }
 }
 
@@ -202,6 +217,135 @@ function switchProfileTab(tab) {
   }
 }
 
+function addAbout() {
+  const getAbout = document.getElementById("addAbout");
+  const about = document.getElementById("about");
+  getAbout.classList.add("hidden");
+  getAbout.classList.remove("profile-section");
+  about.classList.remove("hidden");
+}
+
+
+function newExp() {
+  console.log("trigerred");
+  // Main container
+  const expSection = document.getElementById("experience");
+
+  expSection.classList.remove("hidden");
+
+  // Create the wrapper div for one experience block
+  const card = document.createElement("div");
+  card.className = "profile-card-small profile-section";
+
+  // Create the form
+  const form = document.createElement("form");
+  form.className = "exp-form";
+
+  // --- Designation ---
+  const desigGroup = document.createElement("div");
+  desigGroup.className = "form-group";
+  desigGroup.innerHTML = `
+    <label>Designation</label>
+    <input type="text" name="designation" id="designation" placeholder="Your Designation..." required>
+  `;
+
+  // --- Start & End Date group ---
+  const timeDiv = document.createElement("div");
+  timeDiv.id = "time";
+  timeDiv.innerHTML = `
+    <div class="form-group">
+      <label>Start Date</label>
+      <input type="date" id="startDate" name="startDate" placeholder="Start Date">
+    </div>
+    <div class="form-group">
+      <label>End Date</label>
+      <input type="date" id="endDate" name="endDate" placeholder="End Date">
+    </div>
+  `;
+
+  // --- Job Description ---
+  const jobGroup = document.createElement("div");
+  jobGroup.className = "form-group";
+  jobGroup.innerHTML = `
+    <label>Job Description</label>
+    <textarea id="job-description" name="description" placeholder="Describe Your Role..."></textarea>
+  `;
+
+  const submitform = document.createElement("div");
+  submitform.innerHTML = "<button onclick='updateExp(event)'> Submit </button>";
+
+  // Append everything together
+  form.appendChild(desigGroup);
+  form.appendChild(timeDiv);
+  form.appendChild(jobGroup);
+  form.appendChild(submitform);
+  card.appendChild(form);
+
+  // Add this new form as the last child
+  expSection.appendChild(card);
+}
+
+async function updateName(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("").value;
+
+  const response = await fetch("/profile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: localStorage.getItem("userId"), // get it from login
+      field: "about",
+      value: Abt
+    }),
+  });
+
+  const data = await response.json();
+  console.log("Server responded:", data);
+}
+
+async function updateAbout(event) {
+  event.preventDefault();
+
+  const Abt = document.getElementById("aboutdata").value;
+
+  const response = await fetch("/profile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: localStorage.getItem("userId"), // get it from login
+      field: "about",
+      value: Abt
+    }),
+  });
+
+  showToast("Update Request Status:", "Successfully Updated <b>About</b> Section");
+}
+
+async function updateExp(event) {
+  event.preventDefault();
+
+  const designation = document.getElementById("designation").value;
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const description = document.getElementById("job-description").value;
+
+  const response = await fetch("/profile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: localStorage.getItem("userId"), // get it from login
+      field: "experience",
+      value: { designation, startDate, endDate, description }
+    }),
+  });
+
+  const data = await response.json();
+  if (data) {
+    showToast("Update Request Status:", "Successfully Updated <b>Experience</b> Section");
+  }
+}
+
 /* ---------- tag search (clickable tags) ---------- */
 function tagSearch(e, tag) {
   e.stopPropagation();
@@ -271,35 +415,28 @@ function renderNGOList() {
       .join("");
     card.innerHTML = `
                     <div style="display:flex;gap:12px;align-items:center">
-                        <div class="ngo-icon"><i class="fa ${
-                          n.logoIcon
-                        }"></i></div>
+                        <div class="ngo-icon"><i class="fa ${n.logoIcon
+      }"></i></div>
                         <div style="flex:1">
                             <h3>${n.name}</h3>
-                            <div class="muted">${n.location} • ${
-      n.category
-    }</div>
+                            <div class="muted">${n.location} • ${n.category
+      }</div>
                         </div>
                     </div>
-                    <p style="margin-top:12px">${
-                      n.desc.length > 120 ? n.desc.slice(0, 120) + "…" : n.desc
-                    }</p>
+                    <p style="margin-top:12px">${n.desc.length > 120 ? n.desc.slice(0, 120) + "…" : n.desc
+      }</p>
                     <div class="ngo-tags">${tagsHtml}</div>
                     <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                        <button class="btn" onclick="showProfile('${
-                          n.id
-                        }')">View Profile</button>
-                        <button class="btn" onclick="donate('${
-                          n.id
-                        }')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
-                        <button class="follow-btn ${
-                          n.followed ? "followed" : ""
-                        }" onclick="followNGO(event,this,'${n.id}')">
-                            ${
-                              n.followed
-                                ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed`
-                                : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`
-                            }
+                        <button class="btn" onclick="showProfile('${n.id
+      }')">View Profile</button>
+                        <button class="btn" onclick="donate('${n.id
+      }')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
+                        <button class="follow-btn ${n.followed ? "followed" : ""
+      }" onclick="followNGO(event,this,'${n.id}')">
+                            ${n.followed
+        ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed`
+        : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`
+      }
                         </button>
                     </div>
                 `;
@@ -356,23 +493,20 @@ function showProfile(id) {
     .join("");
 
   content.innerHTML = `
-                <div class="ngo-banner">${
-                  n.banner
-                    ? `<img src="${n.banner}" style="width:100%;height:100%;object-fit:cover;border-radius:6px">`
-                    : `<div style="font-size:18px;color:var(--primary)">${n.name}</div>`
-                }</div>
+                <div class="ngo-banner">${n.banner
+      ? `<img src="${n.banner}" style="width:100%;height:100%;object-fit:cover;border-radius:6px">`
+      : `<div style="font-size:18px;color:var(--primary)">${n.name}</div>`
+    }</div>
                 <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
                     <div style="min-width:120px">
-                        <div class="ngo-icon" style="width:120px;height:120px;border-radius:12px;font-size:40px"><i class="fa ${
-                          n.logoIcon
-                        }"></i></div>
+                        <div class="ngo-icon" style="width:120px;height:120px;border-radius:12px;font-size:40px"><i class="fa ${n.logoIcon
+    }"></i></div>
                     </div>
                     <div style="flex:1">
                         <h2 style="margin:0">${n.name}</h2>
                         <div class="meta-row">
-                            <div><i class="fas fa-map-marker-alt" style="margin-right:8px"></i>${
-                              n.location
-                            }</div>
+                            <div><i class="fas fa-map-marker-alt" style="margin-right:8px"></i>${n.location
+    }</div>
                             <div>•</div>
                             <div><strong>Impact:</strong> ${n.impact.toLocaleString()}</div>
                             <div>•</div>
@@ -383,35 +517,28 @@ function showProfile(id) {
                         <div class="ngo-tags" style="margin-top:6px">${tagsHtml}</div>
 
                         <div class="ngo-actions" style="margin-top:12px">
-                            <button class="btn" onclick="donate('${
-                              n.id
-                            }')"><i class="fas fa-donate" style="margin-right:8px"></i>Donate</button>
-                            <button class="btn btn-secondary" onclick="join('${
-                              n.id
-                            }')"><i class="fas fa-handshake" style="margin-right:8px"></i>Join / Volunteer</button>
-                            <button class="btn btn-secondary" onclick="share('${
-                              n.id
-                            }')"><i class="fas fa-share" style="margin-right:8px"></i>Share</button>
-                            <a class="btn btn-secondary" href="${
-                              n.website
-                            }" target="_blank" rel="noopener">Visit Website</a>
+                            <button class="btn" onclick="donate('${n.id
+    }')"><i class="fas fa-donate" style="margin-right:8px"></i>Donate</button>
+                            <button class="btn btn-secondary" onclick="join('${n.id
+    }')"><i class="fas fa-handshake" style="margin-right:8px"></i>Join / Volunteer</button>
+                            <button class="btn btn-secondary" onclick="share('${n.id
+    }')"><i class="fas fa-share" style="margin-right:8px"></i>Share</button>
+                            <a class="btn btn-secondary" href="${n.website
+    }" target="_blank" rel="noopener">Visit Website</a>
 
                             <!-- follow button on profile uses same handler -->
-                            <button style="margin-left:10px" class="follow-btn ${
-                              n.followed ? "followed" : ""
-                            }" onclick="followNGO(event,this,'${n.id}')">
-                                ${
-                                  n.followed
-                                    ? `<i class="fas fa-check" style="margin-right:8px"></i>Followed`
-                                    : `<i class="fas fa-plus" style="margin-right:8px"></i>Follow`
-                                }
+                            <button style="margin-left:10px" class="follow-btn ${n.followed ? "followed" : ""
+    }" onclick="followNGO(event,this,'${n.id}')">
+                                ${n.followed
+      ? `<i class="fas fa-check" style="margin-right:8px"></i>Followed`
+      : `<i class="fas fa-plus" style="margin-right:8px"></i>Follow`
+    }
                             </button>
                         </div>
 
                         <div style="margin-top:12px">
-                            <strong>Contact:</strong> <a href="mailto:${
-                              n.contact
-                            }">${n.contact}</a>
+                            <strong>Contact:</strong> <a href="mailto:${n.contact
+    }">${n.contact}</a>
                         </div>
                     </div>
                 </div>
@@ -426,9 +553,8 @@ function showProfile(id) {
                                 <div class="muted" style="font-size:13px">2h ago</div>
                             </div>
                         </div>
-                        <p style="margin-top:10px">${
-                          n.name
-                        } — sample update about recent project highlights. (Replace with real content from API)</p>
+                        <p style="margin-top:10px">${n.name
+    } — sample update about recent project highlights. (Replace with real content from API)</p>
                     </div>
                 </div>
             `;
@@ -467,10 +593,10 @@ function join(id) {
 function share(id) {
   navigator.share
     ? navigator.share({
-        title: "Check this NGO",
-        text: "Take a look at " + id,
-        url: location.href,
-      })
+      title: "Check this NGO",
+      text: "Take a look at " + id,
+      url: location.href,
+    })
     : alert("Share this NGO: " + id);
 }
 
@@ -505,35 +631,28 @@ function renderFollowedNGOs() {
       .join("");
     card.innerHTML = `
                     <div style="display:flex;gap:12px;align-items:center">
-                        <div class="ngo-icon"><i class="fa ${
-                          n.logoIcon
-                        }"></i></div>
+                        <div class="ngo-icon"><i class="fa ${n.logoIcon
+      }"></i></div>
                         <div style="flex:1">
                             <h3>${n.name}</h3>
-                            <div class="muted">${n.location} • ${
-      n.category
-    }</div>
+                            <div class="muted">${n.location} • ${n.category
+      }</div>
                         </div>
                     </div>
-                    <p style="margin-top:12px">${
-                      n.desc.length > 120 ? n.desc.slice(0, 120) + "…" : n.desc
-                    }</p>
+                    <p style="margin-top:12px">${n.desc.length > 120 ? n.desc.slice(0, 120) + "…" : n.desc
+      }</p>
                     <div class="ngo-tags">${tagsHtml}</div>
                     <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                        <button class="btn" onclick="showProfile('${
-                          n.id
-                        }')">View Profile</button>
-                        <button class="btn" onclick="donate('${
-                          n.id
-                        }')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
-                        <button class="follow-btn ${
-                          n.followed ? "followed" : ""
-                        }" onclick="followNGO(event,this,'${n.id}')">
-                            ${
-                              n.followed
-                                ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed`
-                                : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`
-                            }
+                        <button class="btn" onclick="showProfile('${n.id
+      }')">View Profile</button>
+                        <button class="btn" onclick="donate('${n.id
+      }')"><i class="fas fa-donate" style="margin-right:6px"></i>Quick Donate</button>
+                        <button class="follow-btn ${n.followed ? "followed" : ""
+      }" onclick="followNGO(event,this,'${n.id}')">
+                            ${n.followed
+        ? `<i class=\"fas fa-check\" style=\"margin-right:8px\"></i>Followed`
+        : `<i class=\"fas fa-plus\" style=\"margin-right:8px\"></i>Follow`
+      }
                         </button>
                     </div>
                 `;
@@ -643,9 +762,8 @@ function renderLeaderboard() {
                     <div class="lb-user">
                         <div class="lb-rank">${idx + 1}</div>
                         <strong>${name}</strong>
-                        <span class="league-badge ${
-                          league.cls
-                        }" style="margin-left:8px">${league.name}</span>
+                        <span class="league-badge ${league.cls
+      }" style="margin-left:8px">${league.name}</span>
                     </div>
                     <div class="lb-points">${pts} pts</div>
                 `;
@@ -681,9 +799,8 @@ function renderLeaderboard() {
         Math.min(100, Math.round(((youPts - start) / (nextAt - start)) * 100))
       );
       progBar.style.width = pct + "%";
-      progText.textContent = `${Math.max(0, youPts - start)} / ${
-        nextAt - start
-      } to next league`;
+      progText.textContent = `${Math.max(0, youPts - start)} / ${nextAt - start
+        } to next league`;
     }
   }
 }

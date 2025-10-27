@@ -12,7 +12,7 @@
 <body>
 
     <!-- ===== SignUp ===== -->
-    <div class="hidden" id="signup-page" >
+    <div class="hidden" id="signup-page">
         <div class="login-card">
             <div class="logo">
                 <h1>Connect<span>NGO</span></h1>
@@ -112,16 +112,18 @@
                 <div class="profile-card">
                     <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
                         alt="Profile" class="profile-img">
-                    <h3 id="userName">Azam</h3>
+                    <h3 id="userName"></h3>
                     <p id="userRole">Director at GreenEarth Initiative</p>
                     <div class="profile-stats">
                         <div class="stat">
-                            <div class="stat-value">342</div>
+                            <!-- ENTER CONNECTIONS -->
+                            <div class="stat-value"></div>
                             <div class="stat-label">Connections</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-value">28</div>
-                            <div class="stat-label">Projects</div>
+                            <!-- ENTER DONATIONS -->
+                            <div class="stat-value"></div>
+                            <div class="stat-label">Donations</div>
                         </div>
                     </div>
                 </div>
@@ -194,16 +196,14 @@
 
                 <!-- PROFILE PAGE -->
                 <div id="profile-page" class="profile-page">
-                    <div class="profile-header">
-                        <div class="profile-banner"></div>
+                    <div id="profhead" class="profile-header">
                         <div class="profile-avatar">
                             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
                                 alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover">
                         </div>
                         <div class="profile-info">
-                            <h2>Sarah Johnson</h2>
-                            <p>Director at GreenEarth Initiative</p>
-                            <p class="muted">New York, USA | Environmental Conservation & Sustainability</p>
+                            <h2>Guest</h2>
+                            
                             <div class="profile-stats"
                                 style="justify-content:flex-start;gap:30px;border:none;padding:10px 0">
                                 <div class="stat">
@@ -231,136 +231,119 @@
 
                     <div class="profile-content">
                         <div id="about-tab">
-                            <div class="profile-section">
+                            <div>
+                                <button id="addAbout" onclick="addAbout()"> Add About </button>
+                            </div>
+
+                            <div id="about" class="profile-section hidden">
                                 <h3>About</h3>
-                                <p>Passionate environmentalist with over 10 years of experience in sustainable
-                                    development and conservation projects. Director at GreenEarth Initiative, leading a
-                                    team of 25 professionals working across 5 countries to promote environmental
-                                    sustainability and community resilience.</p>
+                                <div class="profile-card-small">
+                                    <textarea id="aboutdata" placeholder="Describe Yourself..."></textarea>
+                                    <button id="aboutbtn" onclick="updateAbout(event)">Add</button>
+                                </div>
                             </div>
-
-                            <div class="profile-section">
+                            <div id="experience" class="profile-section hidden">
                                 <h3>Experience</h3>
+                            </div>
+
+                            <div >
+                                <button id="addExp" onclick="newExp()"> Add Experience </button>
+                            </div>
+
+                            
+                        </div>
+
+                        <div class="profile-section">
+                            <h3>Skills & Expertise</h3>
+                            <div class="profile-grid">
                                 <div class="profile-card-small">
-                                    <h4>Director, GreenEarth Initiative</h4>
-                                    <p class="muted">2018 - Present · 5 yrs 3 mos</p>
-                                    <p>Leading strategic planning, fundraising, and implementation of conservation
-                                        projects across multiple regions.</p>
+                                    <h4>Sustainability Planning</h4>
+                                    <p class="muted">Project Management · Strategic Planning</p>
                                 </div>
-                                <div class="profile-card-small" style="margin-top:15px">
-                                    <h4>Project Manager, World Conservation Society</h4>
-                                    <p class="muted">2014 - 2018 · 4 yrs</p>
-                                    <p>Managed community-based conservation initiatives in Southeast Asia, focusing on
-                                        rainforest preservation.</p>
-                                </div>
-                            </div>
-
-                            <div class="profile-section">
-                                <h3>Education</h3>
                                 <div class="profile-card-small">
-                                    <h4>Yale University</h4>
-                                    <p class="muted">Master of Environmental Management</p>
-                                    <p>2012 - 2014</p>
+                                    <h4>Community Development</h4>
+                                    <p class="muted">Stakeholder Engagement · Capacity Building</p>
                                 </div>
-                                <div class="profile-card-small" style="margin-top:15px">
-                                    <h4>University of California, Berkeley</h4>
-                                    <p class="muted">Bachelor of Science in Environmental Science</p>
-                                    <p>2008 - 2012</p>
+                                <div class="profile-card-small">
+                                    <h4>Conservation</h4>
+                                    <p class="muted">Biodiversity · Habitat Restoration</p>
                                 </div>
-                            </div>
-
-                            <div class="profile-section">
-                                <h3>Skills & Expertise</h3>
-                                <div class="profile-grid">
-                                    <div class="profile-card-small">
-                                        <h4>Sustainability Planning</h4>
-                                        <p class="muted">Project Management · Strategic Planning</p>
-                                    </div>
-                                    <div class="profile-card-small">
-                                        <h4>Community Development</h4>
-                                        <p class="muted">Stakeholder Engagement · Capacity Building</p>
-                                    </div>
-                                    <div class="profile-card-small">
-                                        <h4>Conservation</h4>
-                                        <p class="muted">Biodiversity · Habitat Restoration</p>
-                                    </div>
-                                    <div class="profile-card-small">
-                                        <h4>Fundraising</h4>
-                                        <p class="muted">Grant Writing · Donor Relations</p>
-                                    </div>
+                                <div class="profile-card-small">
+                                    <h4>Fundraising</h4>
+                                    <p class="muted">Grant Writing · Donor Relations</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="activity-tab" style="display:none">
-                            <h3>Recent Activity</h3>
-                            <div class="alert-item">
-                                <div class="alert-icon"><i class="fas fa-plus"></i></div>
-                                <div>
-                                    <p><strong>You connected with HealthFirst Worldwide</strong></p>
-                                    <p class="muted">2 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="alert-item">
-                                <div class="alert-icon"><i class="fas fa-calendar"></i></div>
-                                <div>
-                                    <p><strong>You registered for the NGO Leadership Summit on June 15</strong></p>
-                                    <p class="muted">Yesterday</p>
-                                </div>
-                            </div>
-                            <div class="alert-item">
-                                <div class="alert-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                                <div>
-                                    <p><strong>You volunteered for the Coastal Cleanup project</strong></p>
-                                    <p class="muted">3 days ago</p>
-                                </div>
+                    <div id="activity-tab" style="display:none">
+                        <h3>Recent Activity</h3>
+                        <div class="alert-item">
+                            <div class="alert-icon"><i class="fas fa-plus"></i></div>
+                            <div>
+                                <p><strong>You connected with HealthFirst Worldwide</strong></p>
+                                <p class="muted">2 hours ago</p>
                             </div>
                         </div>
-
-                        <div id="connections-tab" style="display:none">
-                            <h3>Your Connections</h3>
-                            <div class="connections-grid">
-                                <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
-                                        class="connection-img">
-                                    <h4>Michael Chen</h4>
-                                    <p class="muted">EcoSolutions</p>
-                                </div>
-                                <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
-                                        class="connection-img">
-                                    <h4>Priya Sharma</h4>
-                                    <p class="muted">HealthFirst Worldwide</p>
-                                </div>
-                                <div class="connection-card">
-                                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
-                                        class="connection-img">
-                                    <h4>David Wilson</h4>
-                                    <p class="muted">Future Forests</p>
-                                </div>
+                        <div class="alert-item">
+                            <div class="alert-icon"><i class="fas fa-calendar"></i></div>
+                            <div>
+                                <p><strong>You registered for the NGO Leadership Summit on June 15</strong></p>
+                                <p class="muted">Yesterday</p>
                             </div>
                         </div>
+                        <div class="alert-item">
+                            <div class="alert-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                            <div>
+                                <p><strong>You volunteered for the Coastal Cleanup project</strong></p>
+                                <p class="muted">3 days ago</p>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div id="projects-tab" style="display:none">
-                            <h3>Your Projects</h3>
-                            <div class="project-card">
-                                <div class="project-header">
-                                    <h4>Community Reforestation Program</h4>
-                                    <span class="stat-value">Ongoing</span>
-                                </div>
-                                <p>Planting 10,000 native trees in deforested areas with local community participation.
-                                </p>
-                                <p class="muted">12 partners · 342 volunteers · 65% complete</p>
+                    <div id="connections-tab" style="display:none">
+                        <h3>Your Connections</h3>
+                        <div class="connections-grid">
+                            <div class="connection-card">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                    class="connection-img">
+                                <h4>Michael Chen</h4>
+                                <p class="muted">EcoSolutions</p>
                             </div>
-                            <div class="project-card">
-                                <div class="project-header">
-                                    <h4>Clean Water Initiative</h4>
-                                    <span class="stat-value">Completed</span>
-                                </div>
-                                <p>Providing clean drinking water solutions to 5 remote villages through well
-                                    installation and water purification systems.</p>
-                                <p class="muted">8 partners · 2,140 beneficiaries</p>
+                            <div class="connection-card">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                                    class="connection-img">
+                                <h4>Priya Sharma</h4>
+                                <p class="muted">HealthFirst Worldwide</p>
                             </div>
+                            <div class="connection-card">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+                                    class="connection-img">
+                                <h4>David Wilson</h4>
+                                <p class="muted">Future Forests</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="projects-tab" style="display:none">
+                        <h3>Your Projects</h3>
+                        <div class="project-card">
+                            <div class="project-header">
+                                <h4>Community Reforestation Program</h4>
+                                <span class="stat-value">Ongoing</span>
+                            </div>
+                            <p>Planting 10,000 native trees in deforested areas with local community participation.
+                            </p>
+                            <p class="muted">12 partners · 342 volunteers · 65% complete</p>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-header">
+                                <h4>Clean Water Initiative</h4>
+                                <span class="stat-value">Completed</span>
+                            </div>
+                            <p>Providing clean drinking water solutions to 5 remote villages through well
+                                installation and water purification systems.</p>
+                            <p class="muted">8 partners · 2,140 beneficiaries</p>
                         </div>
                     </div>
                 </div>
@@ -539,6 +522,7 @@
                         <p id="challengeProgressText" class="muted" style="margin-top:8px">0 / 3 donations completed</p>
                     </div>
                 </div>
+
                 <!-- League Info Modal -->
                 <div id="leagueInfoModal" class="modal-overlay" onclick="closeLeagueInfo(event)">
                     <div class="modal-box" onclick="event.stopPropagation()">
@@ -661,8 +645,7 @@
         </div>
     </div>
 
-    <script src="script.js">
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
